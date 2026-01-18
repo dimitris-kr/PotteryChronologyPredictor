@@ -1,0 +1,16 @@
+@use '@angular/material' as mat;
+
+// Base font stacks
+$lato: 'Lato', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+$dm-serif: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+
+// Material 3 typography configuration
+$typography: mat.define-typography((
+  brand-family: $dm-serif,   // used for display styles
+  plain-family: $lato,       // used for body & components
+
+  // Optional fine-tuning
+  bold-weight: 700,
+  medium-weight: 500,
+  regular-weight: 400,
+));

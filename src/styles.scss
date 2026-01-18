@@ -1,1 +1,218 @@
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+@use "./styles/_theme-colors" as colors;
+@use './styles/_typography' as typo;
+@use './styles/_tokens';
+
+html {
+    height: 100%;
+    @include mat.theme((
+        color: (
+            //primary: mat.$azure-palette,
+            //tertiary: mat.$blue-palette,
+            primary: colors.$primary-palette,
+            secondary: colors.$secondary-palette,
+            tertiary: colors.$tertiary-palette,
+            error: colors.$error-palette,
+            neutral: colors.$neutral-palette,
+            neutral-variant: colors.$neutral-variant-palette,
+        ),
+        typography: typo.$typography,
+        density: 0,
+    ));
+
+    /* Shape / corner overrides */
+    --mat-sys-corner-small: 4px;
+    --mat-sys-corner-medium: 8px;
+    --mat-sys-corner-large: 16px;
+    --mat-sys-corner-full: 16px;
+}
+
+body {
+    // Default the application to a light color theme. This can be changed to
+    // `dark` to enable the dark color theme, or to `light dark` to defer to the
+    // user's system settings.
+    color-scheme: light;
+
+    // Set a default background, font and text colors for the application using
+    // Angular Material's system-level CSS variables. Learn more about these
+    // variables at https://material.angular.dev/guide/system-variables
+    background-color: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    font: var(--mat-sys-body-medium);
+
+    // Reset the user agent margin.
+    margin: 0;
+    height: 100%;
+}
+
 /* You can add global styles to this file, and also import other style files */
+
+
+// LAYOUT
+
+div {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    gap: 20px;
+}
+
+div.row {
+    flex-direction: row;
+}
+
+div.column {
+    flex-direction: column;
+}
+
+div.justify-start {
+    justify-content: flex-start;
+}
+
+div.justify-end {
+    justify-content: flex-end;
+}
+
+div.justify-center {
+    justify-content: center;
+}
+
+div.justify-between {
+    justify-content: space-between;
+}
+
+div.align-start {
+    align-items: flex-start;
+}
+
+div.align-end {
+    align-items: flex-end;
+}
+
+div.align-center {
+    align-items: center;
+}
+
+div.align-stretch {
+    align-items: stretch;
+}
+
+.window {
+    padding: 0 30px;
+    gap: 30px;
+
+    flex-direction: row;
+    justify-content: center;
+    align-items: start;
+}
+
+.content {
+    width: 100%;
+    max-width: 1000px;
+    padding: 30px 0;
+    gap: 30px;
+
+    flex-direction: column;
+}
+
+.content > * {
+    width: 100%;
+}
+
+.card {
+    border-radius: var(--radius-large);
+    background-color: var(--beige-100);
+    padding: 30px;
+}
+
+// BASICS
+
+::-moz-selection,
+::selection {
+    color: var(--text-color-primary);
+    background: var(--orange-90);;
+}
+
+body {
+    background-color: var(--beige-70);
+    font-family: var(--sans-font), sans-serif;
+    color: var(--text-color-body);
+    font-size: 15px;
+    font-weight: 400;
+}
+
+h1, h2, h3 {
+    font-family: var(--serif-font), serif;
+    color: var(--text-color-primary);
+    font-weight: 600;
+}
+
+h4, h5, h6 {
+    font-family: var(--sans-font), serif;
+    color: var(--text-color-primary);
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 36px;
+}
+
+h2 {
+    font-size: 32px;
+}
+
+h3 {
+    font-size: 24px;
+}
+
+h4 {
+    font-size: 20px;
+}
+
+h5 {
+    font-size: 18px;
+}
+
+h6 {
+    font-size: 15px;
+}
+
+p {
+    margin: 0 0 20px;
+}
+
+p:last-child {
+    margin: 0;
+}
+
+// ICONS
+
+mat-icon {
+    font-family: 'Material Symbols Outlined', sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+}
+
+
+// BUTTONS
+
+.mdc-button.mat-mdc-button,
+.mdc-button.mat-mdc-button .mdc-button__ripple,
+.mdc-button.mat-mdc-unelevated-button,
+.mdc-button.mat-mdc-unelevated-button .mdc-button__ripple {
+    border-radius: var(--radius-medium);
+}
+
+.mdc-button[matbutton="filled"].mat-mdc-unelevated-button:not(:disabled) {
+    background-color: var(--orange-00);
+    text-transform: uppercase;
+}

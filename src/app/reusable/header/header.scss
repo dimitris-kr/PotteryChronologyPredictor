@@ -1,0 +1,28 @@
+#header {
+    padding: 10px 30px;
+    background-color: var(--beige-90);
+}
+
+#header {
+    .logo {
+        width: 100%;
+        max-width: 120px;
+        height: auto;
+    }
+
+    nav {
+        a {
+            color: var(--text-color-body);
+        }
+
+        a:hover,
+        a.is-active {
+            color: var(--text-color-accent);
+        }
+    }
+
+    #login.is-active {
+        color: var(--text-color-accent);
+        background-color: var(--transparent);
+    }
+}

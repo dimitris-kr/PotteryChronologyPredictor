@@ -1,0 +1,52 @@
+// GLOBAL VARIABLES
+
+:root {
+    // FONTS
+    --serif-font: 'DM Serif Display';
+    --sans-font: 'Lato';
+
+    // COLORS
+    --orange-00: #D6614A;
+    --orange-20: #F4694E;
+    --orange-90: #F5CFB6;
+
+    --beige-00: #9D7A67;
+    --beige-10: #CB997E;
+    --beige-20: #DDBEA9;
+    --beige-50: #D4C3B7;
+    --beige-60: #E1D1C5;
+    --beige-70: #E7D8CC;
+    --beige-75: #EADBCF;
+    --beige-80: #EDDED2;
+    --beige-90: #F2E3D7;
+    --beige-100: #F3E7DE;
+
+    --olive-00: #2A2E26;
+    --olive-20: #3F4739;
+    --olive-50: #595A52;
+
+    --black-100: rgba(0, 0, 0, 1);
+    --black-50: rgba(0, 0, 0, 0.5);
+    --black-20: rgba(0, 0, 0, 0.2);
+    --black-15: rgba(0, 0, 0, 0.15);
+    --black-10: rgba(0, 0, 0, 0.1);
+    --black-05: rgba(0, 0, 0, 0.05);
+
+    --transparent: rgba(0, 0, 0, 0);
+
+    --white: white;
+
+
+    // RADIUS
+    --radius-small: 4px;
+    --radius-medium: 8px;
+    --radius-large: 16px;
+    --radius-x-large: 24px;
+}
+
+:root {
+    --text-color-primary: var(--olive-00);
+    --text-color-secondary: var(--olive-20);
+    --text-color-body: var(--olive-50);
+    --text-color-accent: var(--orange-00);
+}

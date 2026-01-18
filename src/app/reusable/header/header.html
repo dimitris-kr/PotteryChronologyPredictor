@@ -1,0 +1,33 @@
+<div id="header" class="card row justify-between align-stretch">
+    <div class="row justify-start align-center">
+        <a routerLink="/">
+            <img ngSrc="assets/logo.png" alt="logo" height="240" width="591" class="logo">
+        </a>
+    </div>
+    <div class="row justify-end align-center">
+        <nav class="nav">
+            @for (menuItem of menuItems; track menuItem.label) {
+                <a
+                    mat-button
+                    [routerLink]="menuItem.route"
+                    routerLinkActive="is-active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                >
+                    <mat-icon>{{ menuItem.icon }}</mat-icon>
+                    <span>{{ menuItem.label }}</span>
+                </a>
+            }
+
+        </nav>
+        <a
+            matButton="filled"
+            routerLink="/login"
+            routerLinkActive="is-active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            id="login"
+        >
+            <mat-icon>login</mat-icon>
+            <span>Login</span>
+        </a>
+    </div>
+</div>
