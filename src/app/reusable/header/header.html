@@ -1,11 +1,11 @@
-<div id="header" class="card row justify-between align-stretch">
-    <div class="row justify-start align-center">
+<div id="header" class="card flex row justify-between align-stretch">
+    <div class="flex row justify-start align-center">
         <a routerLink="/">
             <img ngSrc="assets/logo.png" alt="logo" height="240" width="591" class="logo">
         </a>
     </div>
-    <div class="row justify-end align-center">
-        <nav class="nav">
+    <div class="flex row justify-end align-center gap-2">
+        <nav class="nav flex row justify-end align-center gap-2">
             @for (menuItem of menuItems; track menuItem.label) {
                 <a
                     mat-button

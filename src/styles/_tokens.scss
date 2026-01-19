@@ -36,12 +36,20 @@
 
     --white: white;
 
+    // SPACING
+    --space-0: 0;
+    --space-1: 5px;
+    --space-2: 10px;
+    --space-3: 20px;
+    --space-4: 30px;
+    --space-5: 40px;
+    --space-6: 60px;
 
     // RADIUS
-    --radius-small: 4px;
-    --radius-medium: 8px;
-    --radius-large: 16px;
-    --radius-x-large: 24px;
+    --radius-xs: 4px;
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
 }
 
 :root {

@@ -1,1 +1,27 @@
-<p>login works!</p>
+<div class="inner justify-center align-center">
+    <div class="inner-max flex column gap-5">
+        <div class="floating text-center">
+            <h2>Login</h2>
+            <p>Access the chronology prediction tools and manage your submissions.</p>
+        </div>
+        <div class="card">
+            <form action="">
+                <mat-form-field appearance="outline">
+                    <mat-label>Enter your password</mat-label>
+                    <input matInput [type]="hidePassword ? 'password' : 'text'" />
+                    <button
+                        matIconButton
+                        matSuffix
+                        (click)="togglePasswordVisibility($event)"
+                        [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hidePassword"
+                    >
+                        <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                </mat-form-field>
+            </form>
+
+        </div>
+    </div>
+
+</div>
