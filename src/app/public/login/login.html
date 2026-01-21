@@ -4,21 +4,46 @@
             <h2>Login</h2>
             <p>Access the chronology prediction tools and manage your submissions.</p>
         </div>
-        <div class="card">
-            <form action="">
+        <div class="card flex column gap-2">
+            <form [formGroup]="form" (ngSubmit)="submit()" class="flex column gap-2">
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Username</mat-label>
+                    <input matInput formControlName="username" />
+
+                    <mat-error>
+                        @if (form.get('username')?.hasError('required')) {
+                            {{ ffError.msg('required') }}
+                        }
+                    </mat-error>
+                </mat-form-field>
                 <mat-form-field appearance="outline">
-                    <mat-label>Enter your password</mat-label>
-                    <input matInput [type]="hidePassword ? 'password' : 'text'" />
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password"/>
                     <button
-                        matIconButton
+                        mat-icon-button
                         matSuffix
+                        type="button"
                         (click)="togglePasswordVisibility($event)"
                         [attr.aria-label]="'Hide password'"
                         [attr.aria-pressed]="hidePassword"
                     >
                         <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
+                    <mat-error>
+                        @if (form.get('password')?.hasError('required')) {
+                            {{ ffError.msg('required') }}
+                        }
+                    </mat-error>
                 </mat-form-field>
+
+                <button
+                    mat-flat-button
+                    color="primary"
+                    class="w-100"
+                    type="submit"
+                    [disabled]="loading || form.invalid"
+                >{{ loading ? 'Signing in…' : 'Login' }}
+                </button>
             </form>
 
         </div>
