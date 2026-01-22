@@ -9,12 +9,12 @@ export const authReverseGuard: CanActivateFn = (route, state) => {
     const alert = inject(Alert);
 
     if (auth.isLoggedIn()) {
-        // ✅ User is already logged in → redirect to admin
+        // User is already logged in → redirect to admin
         router.navigate(['/admin']);
         // alert.info('You are already logged in.');
         return false;
     }
 
-    // ✅ Not logged in → allow access
+    // Not logged in → allow access
     return true;
 };

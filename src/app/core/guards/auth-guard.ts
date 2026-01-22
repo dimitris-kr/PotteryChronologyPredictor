@@ -12,7 +12,8 @@ export const authGuard: CanActivateFn = (route, state) => {
         return true;
     }
 
-    // 🔒 Not authenticated
+    // Not authenticated
+    auth.logout();
     alert.error('Please log in to continue');
     router.navigate(['/login'], {
         queryParams: { returnUrl: state.url },

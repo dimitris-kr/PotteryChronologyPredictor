@@ -5,15 +5,15 @@ import { Injectable } from '@angular/core';
 })
 export class FormFieldError {
     messages: Map<string, string> = new Map([
-        ['required', 'Το πεδίο είναι υποχρεωτικό'],
-        ['min', 'πρέπει να είναι ≥'],
-        ['max', 'πρέπει να είναι ≤'],
-        ['minDate', 'Η ημερομηνία πρέπει να είναι μετά από'],
-        ['maxDate', 'Η ημερομηνία είναι μεγαλύτερη από'],
-        ['parseDate', 'Μη έγκυρη μορφή ημερομηνίας'],
+        ['required', 'This field is required'],
+        ['min', 'must be ≥'],
+        ['max', 'must be ≤'],
+        ['minDate', 'The date must be after'],
+        ['maxDate', 'The date must be before'],
+        ['parseDate', 'The date format is invalid'],
     ]);
 
     msg(key: string): string {
-        return this.messages.get(key) || 'Σφάλμα.';
+        return this.messages.get(key) || 'Field Error.';
     }
 }
