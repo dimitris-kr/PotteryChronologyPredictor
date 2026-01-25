@@ -1,0 +1,22 @@
+#topbar {
+    background-color: var(--beige-90);
+}
+
+#topbar {
+    .logo {
+        width: 100%;
+        max-width: 90px;
+        height: auto;
+    }
+
+
+    .mat-mdc-button {
+            color: var(--text-color-body);
+        }
+
+    .mat-mdc-button:hover,
+    .mat-mdc-button.is-active {
+            color: var(--text-color-accent);
+        }
+
+}

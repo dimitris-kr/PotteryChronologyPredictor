@@ -22,6 +22,7 @@ export class App {
         if (token && this.auth.isTokenExpired(token)) {
             this.auth.logout();
             alert.error('Session expired. Please log in again.');
+            this.router.navigate(['/login']);
         }
     }
 }

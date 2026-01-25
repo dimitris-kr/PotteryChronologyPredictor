@@ -1,0 +1,55 @@
+.sidebar {
+    overflow-y: auto;
+    height: calc(100vh - 140px);
+    background-color: var(--beige-90);
+}
+
+@media only screen and (max-width: 767px) {
+    .sidebar {
+        height: calc(100vh - 80px);
+    }
+}
+
+.sidebar {
+    .logo {
+        width: 100%;
+        height: auto;
+        max-width: 150px;
+    }
+
+    .nav {
+        nav {
+            a {
+                color: var(--text-color-primary);
+                justify-content: start;
+                text-align: left;
+                padding-left: 30px;
+                padding-right: 30px;
+                font-size: 16px;
+            }
+
+            .mdc-button.mat-mdc-button{
+                --radius-sm: 0px;
+            }
+
+            a:hover,
+            a.is-active {
+                color: var(--text-color-accent);
+                background-color: var(--beige-80);
+            }
+
+            a.is-active::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 2px;
+                height: 100%;
+                background-color: var(--orange-00);
+                border-radius: 2px 0 0 2px;
+            }
+        }
+    }
+}
+
+

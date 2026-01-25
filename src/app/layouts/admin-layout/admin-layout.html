@@ -1,2 +1,37 @@
-<p>admin-layout works!</p>
-<router-outlet></router-outlet>
+<div class="window">
+    <mat-sidenav-container class="admin-layout">
+
+        <mat-sidenav
+            #sidenav
+            class="sidebar"
+            [mode]="isMobile() ? 'over' : 'side'"
+            [opened]="!isMobile()"
+        >
+            <app-sidebar></app-sidebar>
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+            <div class="content">
+                <app-topbar (menuClick)="sidenav.toggle()"></app-topbar>
+                <router-outlet></router-outlet>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+    <!--@if (isMobile()) {
+
+    } @else {
+        <div class="window-inner">
+            <div class="window-inner-inner">
+                <div class="sidebar-wrapper py-4">
+                    <app-sidebar></app-sidebar>
+                </div>
+                <div class="content">
+                    <app-topbar></app-topbar>
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+
+        </div>
+    }-->
+
+</div>

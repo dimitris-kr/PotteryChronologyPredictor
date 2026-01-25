@@ -1,0 +1,44 @@
+<div id="topbar" class="card flex row justify-between align-stretch px-4 py-1">
+    <div class="flex row justify-start align-center">
+        <div  class="flex row justify-start align-center gap-2 hide-desktop">
+            <button
+                mat-icon-button
+                class="menu-btn"
+                (click)="toggleSidebar()"
+            >
+                <mat-icon>menu</mat-icon>
+            </button>
+            <a routerLink="/">
+                <img ngSrc="assets/logo.png" alt="logo" height="240" width="591" class="logo">
+            </a>
+        </div>
+
+        <span class="hide-mobile">
+            Chronology Prediction for Pottery Items
+        </span>
+    </div>
+    <div class="flex row justify-end align-center gap-3">
+        <nav class="nav flex row justify-end align-center gap-2 hide-mobile">
+            @for (menuItem of menuItems; track menuItem.label) {
+                <a
+                    mat-button
+                    [routerLink]="'/admin' + menuItem.route"
+                    routerLinkActive="is-active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                >
+                    <mat-icon>{{ menuItem.icon }}</mat-icon>
+                    <span>{{ menuItem.label }}</span>
+                </a>
+            }
+        </nav>
+
+        <button
+            matButton
+            aria-label="Logout"
+            (click)="logout()"
+        >
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+        </button>
+    </div>
+</div>

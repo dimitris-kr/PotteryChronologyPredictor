@@ -1,0 +1,53 @@
+<div class="sidebar card flex column py-5 gap-5">
+    <div class="flex justify-center align-center">
+        <img ngSrc="assets/logo.png" alt="logo" height="240" width="591" class="logo">
+    </div>
+
+    <div class="action-nav px-3">
+        <a
+            matButton="filled"
+            routerLink="/admin/predictions/new"
+            routerLinkActive="is-active"
+            id="new-prediction"
+            class="w-100"
+        >
+            <mat-icon>auto_fix_high</mat-icon>
+            <span>New Prediction</span>
+        </a>
+    </div>
+
+    <div class="nav main-nav">
+        <nav>
+            @for (menuItem of mainMenuItems; track menuItem.label) {
+                <a
+                    mat-button
+                    [routerLink]="'/admin' + menuItem.route"
+                    routerLinkActive="is-active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    class="w-100"
+                >
+                    <mat-icon>{{ menuItem.icon }}</mat-icon>
+                    <span>{{ menuItem.label }}</span>
+                </a>
+            }
+        </nav>
+    </div>
+
+    <div class="nav secondary-nav hide-desktop">
+        <nav>
+            @for (menuItem of secondaryMenuItems; track menuItem.label) {
+                <a
+                    mat-button
+                    [routerLink]="'/admin' + menuItem.route"
+                    routerLinkActive="is-active"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    class="w-100"
+                >
+                    <mat-icon>{{ menuItem.icon }}</mat-icon>
+                    <span>{{ menuItem.label }}</span>
+                </a>
+            }
+        </nav>
+    </div>
+</div>
+
