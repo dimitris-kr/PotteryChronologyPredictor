@@ -19,7 +19,7 @@
 
     .nav {
         nav {
-            a {
+            .nav-link {
                 color: var(--text-color-primary);
                 justify-content: start;
                 text-align: left;
@@ -28,17 +28,17 @@
                 font-size: 16px;
             }
 
-            .mdc-button.mat-mdc-button{
+            .nav-link {
                 --radius-sm: 0px;
             }
 
-            a:hover,
-            a.is-active {
+            .nav-link:hover,
+            .nav-link.is-active {
                 color: var(--text-color-accent);
                 background-color: var(--beige-80);
             }
 
-            a.is-active::after {
+            .nav-link.is-active::after {
                 content: '';
                 position: absolute;
                 top: 0;
@@ -49,6 +49,10 @@
                 border-radius: 2px 0 0 2px;
             }
         }
+    }
+
+    .action-nav:not(:has(.nav-link)) {
+        padding: 0 20px;
     }
 }
 

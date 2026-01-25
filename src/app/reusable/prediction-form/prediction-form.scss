@@ -1,0 +1,46 @@
+.image-upload {
+    border: 2px dashed var(--black-20);
+    border-radius: 8px;
+    height: calc(100% - 19px);
+    min-height: 160px;
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    //color: #6b6b6b;
+    text-align: center;
+
+    transition: background-color 0.2s, border-color 0.2s;
+
+    &:hover {
+        background-color: var(--beige-90);
+        border-color: var(--orange-00);
+    }
+
+    .upload-icon {
+        color:var(--beige-10);
+    }
+}
+
+/*.chronology-toggle {
+    border-radius: 999px;
+    background: #efe4db;
+    padding: 4px;
+
+    mat-button-toggle {
+        border-radius: 999px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px;
+        border: none;
+    }
+
+    .mat-button-toggle-checked {
+        background-color: var(--orange-00);
+        color: #fff !important;
+    }
+}*/
+

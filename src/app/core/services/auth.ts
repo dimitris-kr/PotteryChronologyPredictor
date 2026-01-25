@@ -79,11 +79,7 @@ export class Auth {
     isTokenExpired(token: string): boolean {
         try {
             const decoded = jwtDecode<JwtPayload>(token);
-            console.log(decoded);
-            console.log(decoded.exp);
-            console.log(new Date(decoded.exp * 1000));
             const now = Math.floor(Date.now() / 1000); // seconds
-            console.log((decoded.exp - now) / 60)
             return decoded.exp < now;
         } catch {
             return true; // invalid token = treat as expired

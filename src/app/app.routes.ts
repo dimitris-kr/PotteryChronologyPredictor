@@ -6,6 +6,8 @@ import {Dashboard} from './admin/dashboard/dashboard';
 import {AdminLayout} from './layouts/admin-layout/admin-layout';
 import {authGuard} from './core/guards/auth-guard';
 import {authReverseGuard} from './core/guards/auth-reverse-guard';
+import {PredictionsAll} from './admin/predictions/predictions-all/predictions-all';
+import {PredictionsNew} from './admin/predictions/predictions-new/predictions-new';
 
 export const routes: Routes = [
     /* Public layout */
@@ -50,6 +52,19 @@ export const routes: Routes = [
                 path: 'about',
                 component: About,
             },
+            {
+                path: 'predictions',
+                children: [
+                    {
+                        path: '',
+                        component: PredictionsAll,
+                    },
+                    {
+                        path: 'new',
+                        component: PredictionsNew,
+                    }
+                ]
+            }
             /*{
                 path: 'feature-a',
                 loadComponent: () =>

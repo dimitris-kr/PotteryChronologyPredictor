@@ -3,17 +3,19 @@
         <img ngSrc="assets/logo.png" alt="logo" height="240" width="591" class="logo">
     </div>
 
-    <div class="action-nav px-3">
-        <a
-            matButton="filled"
-            routerLink="/admin/predictions/new"
-            routerLinkActive="is-active"
-            id="new-prediction"
-            class="w-100"
-        >
-            <mat-icon>auto_fix_high</mat-icon>
-            <span>New Prediction</span>
-        </a>
+    <div class="nav action-nav">
+        <nav>
+            <a
+                matButton="filled"
+                routerLink="/admin/predictions/new"
+                routerLinkActive="is-active nav-link"
+                id="new-prediction"
+                class="w-100"
+            >
+                <mat-icon>auto_fix_high</mat-icon>
+                <span>New Prediction</span>
+            </a>
+        </nav>
     </div>
 
     <div class="nav main-nav">
@@ -23,8 +25,8 @@
                     mat-button
                     [routerLink]="'/admin' + menuItem.route"
                     routerLinkActive="is-active"
-                    [routerLinkActiveOptions]="{ exact: true }"
-                    class="w-100"
+
+                    class="w-100 nav-link"
                 >
                     <mat-icon>{{ menuItem.icon }}</mat-icon>
                     <span>{{ menuItem.label }}</span>
@@ -41,7 +43,7 @@
                     [routerLink]="'/admin' + menuItem.route"
                     routerLinkActive="is-active"
                     [routerLinkActiveOptions]="{ exact: true }"
-                    class="w-100"
+                    class="w-100 nav-link"
                 >
                     <mat-icon>{{ menuItem.icon }}</mat-icon>
                     <span>{{ menuItem.label }}</span>

@@ -1,0 +1,85 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex column gap-5">
+    <div class="flex column gap-3">
+        <div class="flex row gap-2 justify-start align-center">
+            <h4 class="m-0">Pottery Item</h4>
+            <button
+                matIconButton
+                aria-label="help"
+                matTooltip="Enter a description and/or an image of the pottery item you wish to get a chronology prediction for."
+                matTooltipPosition="after"
+            >
+                <mat-icon>info</mat-icon>
+            </button>
+        </div>
+
+        <div class="flex row wrap justify-between gy-2">
+            <div class="w-6">
+                <mat-form-field appearance="outline" floatLabel="always" class="w-100 description-field">
+                    <mat-label>Description</mat-label>
+
+                    <textarea
+                        matInput
+                        rows="6"
+                        formControlName="text"
+                        placeholder="Write a short description of the pottery item ..."
+                    ></textarea>
+
+                </mat-form-field>
+            </div>
+            <div class="w-6">
+                <div
+                    class="image-upload"
+                    (click)="fileInput.click()"
+                    (dragover)="onDragOver($event)"
+                    (drop)="onFileDrop($event)"
+                >
+                    <input
+                        #fileInput
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        (change)="onFileSelected($event)"
+                    />
+
+                    <mat-icon class="upload-icon">add_photo_alternate</mat-icon>
+
+                    <p>
+                        Drag & Drop or Click to<br />
+                        Upload Image of Pottery
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="flex column gap-3">
+        <div class="flex row gap-2 justify-start align-center">
+            <h4 class="m-0">Chronology Type</h4>
+            <button
+                matIconButton
+                aria-label="help"
+                matTooltip="Choose the type of chronology you wish the prediction output to have."
+                matTooltipPosition="after"
+            >
+                <mat-icon>info</mat-icon>
+            </button>
+        </div>
+
+        <div>
+            <mat-button-toggle-group
+                formControlName="task"
+                class="chronology-toggle"
+            >
+                <mat-button-toggle value="classification">
+                    Historical Period
+                </mat-button-toggle>
+
+                <mat-button-toggle value="regression">
+                    Exact Years
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+    </div>
+
+</form>
