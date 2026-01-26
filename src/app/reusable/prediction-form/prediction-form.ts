@@ -1,10 +1,11 @@
-import {Component} from '@angular/core';
-import {MatIconButton} from '@angular/material/button';
+import {ChangeDetectorRef, Component, NgZone} from '@angular/core';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {JsonPipe} from '@angular/common';
 
 @Component({
     selector: 'app-prediction-form',
@@ -17,7 +18,9 @@ import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-to
         MatLabel,
         MatInput,
         MatButtonToggleGroup,
-        MatButtonToggle
+        MatButtonToggle,
+        MatButton,
+        JsonPipe
     ],
     templateUrl: './prediction-form.html',
     styleUrl: './prediction-form.scss',
@@ -25,7 +28,13 @@ import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-to
 export class PredictionForm {
     form: FormGroup;
 
-    constructor(private formBuilder: FormBuilder) {
+    imagePreviewUrl: string | null = null;
+
+    constructor(
+        private formBuilder: FormBuilder,
+        private zone: NgZone,
+        private cdr: ChangeDetectorRef
+    ) {
         this.form = this.formBuilder.group(
             {
                 text: [''],
@@ -47,10 +56,17 @@ export class PredictionForm {
 
     onFileSelected(event: Event) {
         const file = (event.target as HTMLInputElement).files?.[0];
-        if (file) {
-            this.form.patchValue({ image: file });
-            this.form.updateValueAndValidity();
-        }
+        if (!file) return;
+
+        this.form.patchValue({image: file});
+        this.form.updateValueAndValidity();
+
+        this.previewImage(file);
+    }
+
+    clearImage() {
+        this.form.patchValue({image: null});
+        this.imagePreviewUrl = null;
     }
 
     onDragOver(event: DragEvent) {
@@ -60,9 +76,20 @@ export class PredictionForm {
     onFileDrop(event: DragEvent) {
         event.preventDefault();
         const file = event.dataTransfer?.files[0];
-        if (file) {
-            this.form.patchValue({ image: file });
-        }
+        if (!file) return;
+        this.form.patchValue({image: file});
+        this.form.updateValueAndValidity();
+
+        this.previewImage(file);
+    }
+
+    previewImage(file: File) {
+        const reader = new FileReader();
+        reader.onload = () => {
+            this.imagePreviewUrl = reader.result as string;
+            this.cdr.markForCheck();
+        };
+        reader.readAsDataURL(file);
     }
 
     submit() {

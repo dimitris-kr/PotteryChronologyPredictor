@@ -270,6 +270,11 @@ mat-icon {
 
 body {
     --mat-form-field-outlined-container-shape: var(--radius-sm);
+    --mat-form-field-container-text-font: var(--sans-font);
+    --mat-form-field-outlined-label-text-font: var(--sans-font);
+    --mat-form-field-outlined-label-text-color: var(--text-color-secondary);
+    --mat-form-field-outlined-label-text-weight: 500;
+
 }
 
 // SNACKBAR ALERTS

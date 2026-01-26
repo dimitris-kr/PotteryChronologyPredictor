@@ -19,7 +19,7 @@
 
                     <textarea
                         matInput
-                        rows="6"
+                        rows="7"
                         formControlName="text"
                         placeholder="Write a short description of the pottery item ..."
                     ></textarea>
@@ -29,10 +29,12 @@
             <div class="w-6">
                 <div
                     class="image-upload"
+                    [class.has-image]="imagePreviewUrl"
                     (click)="fileInput.click()"
                     (dragover)="onDragOver($event)"
                     (drop)="onFileDrop($event)"
                 >
+                    <span class="label">Image</span>
                     <input
                         #fileInput
                         type="file"
@@ -41,12 +43,21 @@
                         (change)="onFileSelected($event)"
                     />
 
-                    <mat-icon class="upload-icon">add_photo_alternate</mat-icon>
-
-                    <p>
-                        Drag & Drop or Click to<br />
-                        Upload Image of Pottery
-                    </p>
+                    @if (imagePreviewUrl) {
+                        <img [src]="imagePreviewUrl" alt="Preview" />
+                        <button
+                            mat-icon-button
+                            class="remove-btn"
+                            (click)="clearImage(); $event.stopPropagation()"
+                        >
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    } @else {
+                        <div class="placeholder">
+                            <mat-icon class="upload-icon">add_photo_alternate</mat-icon>
+                            <p>Drag & Drop or Click to<br /> Upload Image of Pottery</p>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -80,6 +91,23 @@
                 </mat-button-toggle>
             </mat-button-toggle-group>
         </div>
+    </div>
+
+    <div class="flex justify-start align-center py-3">
+        <button
+            mat-flat-button
+            color="primary"
+            type="submit"
+            class="predict-btn"
+            [disabled]="form.invalid"
+        >
+            <mat-icon>auto_fix_high</mat-icon>
+            Predict Chronology
+        </button>
+    </div>
+
+    <div>
+        {{form.value | json}}
     </div>
 
 </form>
