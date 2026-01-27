@@ -11,7 +11,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     const router = inject(Router);
     const alert = inject(Alert);
 
-    // ✅ Attach token if it exists
+    // Attach token if it exists
     const token = auth.token;
 
     const authReq = token

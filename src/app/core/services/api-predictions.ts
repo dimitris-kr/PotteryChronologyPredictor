@@ -1,0 +1,69 @@
+import {Injectable} from '@angular/core';
+import {ClassificationPrediction, Prediction, RegressionPredictionResult} from '../models/prediction';
+import {parseBackendDate} from '../utils/dates';
+import {getApiUrl} from '../utils/request';
+import {HttpClient} from '@angular/common/http';
+import {map, Observable} from 'rxjs';
+import {PaginatedResponse} from '../models/paginated-response';
+
+@Injectable({
+    providedIn: 'root',
+})
+export class ApiPredictions {
+
+    private readonly url = getApiUrl('predictions');
+
+    constructor(private http: HttpClient) {
+    }
+
+    getAll(limit = 20, offset = 0): Observable<PaginatedResponse<Prediction>> {
+        return this.http
+            .get<any>(this.url, {params: {limit, offset}})
+            .pipe(
+                map(res => ({
+                    items: res.items.map((raw: any) => this.normalizePrediction(raw)),
+                    total: res.total,
+                    limit: res.limit,
+                    offset: res.offset,
+                }))
+            );
+    }
+
+    getSingle(id: number): Observable<Prediction> {
+        return this.http
+            .get(`${this.url}/${id}`)
+            .pipe(map(raw => this.normalizePrediction(raw)));
+    }
+
+    create(formData: FormData): Observable<Prediction> {
+        return this.http
+            .post<any>(this.url, formData)
+            .pipe(
+                map(raw => this.normalizePrediction(raw))
+            );
+    }
+
+    delete(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.url}/${id}`);
+    }
+
+    private normalizePrediction(raw: any): Prediction {
+        const base = {
+            ...raw,
+            created_at: parseBackendDate(raw.created_at),
+        };
+
+        if (raw.historical_period) {
+            return {
+                ...base,
+                task: 'classification',
+            } as ClassificationPrediction;
+        }
+
+        return {
+            ...base,
+            task: 'regression',
+        } as RegressionPredictionResult;
+    }
+
+}
