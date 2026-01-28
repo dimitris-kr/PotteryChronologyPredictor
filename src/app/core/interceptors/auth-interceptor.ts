@@ -4,8 +4,13 @@ import {Auth} from '../services/auth';
 import {Router} from '@angular/router';
 import {Alert} from '../services/alert';
 import {catchError, throwError} from 'rxjs';
+import {environment} from '../../../environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+
+    if (!req.url.startsWith(environment.apiUrl)) {
+        return next(req);
+    }
 
     const auth = inject(Auth);
     const router = inject(Router);

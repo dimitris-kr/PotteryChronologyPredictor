@@ -309,3 +309,8 @@ body {
     }
 }
 
+// TABLE
+.mat-mdc-table,
+.mat-mdc-paginator {
+    background-color: transparent !important;
+}

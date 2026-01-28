@@ -1,0 +1,28 @@
+table .image-container {
+    width: 50px;
+    aspect-ratio: 1;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background-color: var(--black-05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .mat-mdc-progress-spinner {
+        --spinner-size: 25px;
+        width: var(--spinner-size) !important;
+        height: var(--spinner-size) !important;
+        --mat-progress-spinner-size: var(--spinner-size);
+        --mat-progress-spinner-active-indicator-width: var(--spinner-size);
+    }
+}
+
+.predictions {
+    overflow-x: auto;
+}

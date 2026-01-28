@@ -6,6 +6,7 @@ export interface PredictionBase {
 
     // inputs
     input_text: string | null;
+    input_image_path: string | null;
     input_image_url: string | null;
 
     status: 'pending' | 'validated';
