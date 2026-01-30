@@ -13,14 +13,6 @@ table .image-container {
         height: 100%;
         object-fit: cover;
     }
-
-    .mat-mdc-progress-spinner {
-        --spinner-size: 25px;
-        width: var(--spinner-size) !important;
-        height: var(--spinner-size) !important;
-        --mat-progress-spinner-size: var(--spinner-size);
-        --mat-progress-spinner-active-indicator-width: var(--spinner-size);
-    }
 }
 
 .predictions {

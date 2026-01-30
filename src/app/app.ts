@@ -2,10 +2,11 @@ import { Component, signal } from '@angular/core';
 import {ActivatedRoute, Router, RouterOutlet, RouterStateSnapshot} from '@angular/router';
 import {Auth} from './core/services/auth';
 import {Alert} from './core/services/alert';
+import {Loader} from './reusable/loader/loader';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+    imports: [RouterOutlet, Loader],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

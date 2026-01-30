@@ -22,7 +22,7 @@
                             >
                             <!--                            [src]="getApiUrl('images') + '/' + p.input_image_path"-->
                         } @else {
-                            <mat-spinner></mat-spinner>
+                            <mat-spinner diameter="25"></mat-spinner>
                         }
                     }
                 </div>
@@ -49,12 +49,12 @@
         </ng-container>
 
         <!-- Model -->
-        <ng-container matColumnDef="model">
+        <!--<ng-container matColumnDef="model">
             <th mat-header-cell *matHeaderCellDef>Model</th>
             <td mat-cell *matCellDef="let p">
                 {{ p.model_version.model.name }} <span>{{ p.model_version.version }}</span>
             </td>
-        </ng-container>
+        </ng-container>-->
 
         <!-- Result -->
         <ng-container matColumnDef="result">

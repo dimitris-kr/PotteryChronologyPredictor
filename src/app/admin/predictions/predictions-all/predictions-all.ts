@@ -21,6 +21,7 @@ import {getApiUrl} from '../../../core/utils/request';
 import {ApiImages} from '../../../core/services/api-images';
 import {forkJoin, tap} from 'rxjs';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {Loader} from '../../../core/services/loader';
 
 @Component({
   selector: 'app-predictions-all',
@@ -53,7 +54,7 @@ export class PredictionsAll implements OnInit{
         'inputImage',
         'inputText',
         'outputType',
-        'model',
+        // 'model',
         'result',
         'createdAt',
         'actions',
@@ -69,6 +70,7 @@ export class PredictionsAll implements OnInit{
     constructor(
         private predictionsApi: ApiPredictions,
         private imagesApi: ApiImages,
+        private loader: Loader,
         private cdr: ChangeDetectorRef
     ) {}
 
@@ -85,6 +87,7 @@ export class PredictionsAll implements OnInit{
         const offset = this.pageIndex * this.pageSize;
 
         this.loading = true;
+        this.loader.show();
 
         this.predictionsApi
             .getAll(this.pageSize, offset)
@@ -92,6 +95,7 @@ export class PredictionsAll implements OnInit{
                 this.dataSource.data = res.items;
                 this.total = res.total;
                 this.loading = false;
+                this.loader.hide();
                 this.cdr.markForCheck();
                 /*for (let p of res.items) {
                     this.loadImage(p);

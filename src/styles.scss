@@ -31,6 +31,8 @@ html {
     --mat-sys-corner-medium: 8px;
     --mat-sys-corner-large: 16px;
     --mat-sys-corner-full: 16px;
+
+    --mat-sys-outline: var(--black-15);
 }
 
 body {
@@ -313,4 +315,9 @@ body {
 .mat-mdc-table,
 .mat-mdc-paginator {
     background-color: transparent !important;
+}
+
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+    padding: 5px 10px !important;
 }
