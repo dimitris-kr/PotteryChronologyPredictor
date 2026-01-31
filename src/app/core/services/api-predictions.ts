@@ -1,10 +1,18 @@
 import {Injectable} from '@angular/core';
-import {ClassificationPrediction, Prediction, RegressionPredictionResult} from '../models/prediction';
+import {
+    ClassificationPrediction,
+    Prediction,
+    PredictionFilters,
+    PredictionSortBy,
+    RegressionPredictionResult
+} from '../models/prediction';
 import {parseBackendDate} from '../utils/dates';
 import {getApiUrl} from '../utils/request';
 import {HttpClient} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
 import {PaginatedResponse} from '../models/paginated-response';
+import {RequestParams} from '../models/request-params';
+import {cleanParams} from '../utils/helpers';
 
 @Injectable({
     providedIn: 'root',
@@ -16,9 +24,29 @@ export class ApiPredictions {
     constructor(private http: HttpClient) {
     }
 
-    getAll(limit = 20, offset = 0): Observable<PaginatedResponse<Prediction>> {
+    /*getAll(
+        limit = 25,
+        offset = 0,
+        sort_by: 'created_at' | 'id' = 'created_at',
+        order: 'asc' | 'desc' = 'desc'
+    ): Observable<PaginatedResponse<Prediction>> {
         return this.http
-            .get<any>(this.url, {params: {limit, offset}})
+            .get<any>(this.url, {params: {limit, offset, sort_by, order}})
+            .pipe(
+                map(res => ({
+                    items: res.items.map((raw: any) => this.normalizePrediction(raw)),
+                    total: res.total,
+                    limit: res.limit,
+                    offset: res.offset,
+                }))
+            );
+    }*/
+
+    getAll(
+        params: RequestParams<PredictionSortBy, PredictionFilters>
+    ): Observable<PaginatedResponse<Prediction>> {
+        return this.http
+            .get<any>(this.url, {params: {...params.page, ...params.sort, ...cleanParams(params.filters)}})
             .pipe(
                 map(res => ({
                     items: res.items.map((raw: any) => this.normalizePrediction(raw)),

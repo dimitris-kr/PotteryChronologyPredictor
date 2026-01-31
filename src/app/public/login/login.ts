@@ -9,6 +9,8 @@ import {Alert} from '../../core/services/alert';
 import {finalize} from 'rxjs';
 import {FormFieldError} from '../../core/services/form-field-error';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {Loader} from '../../core/services/loader';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
     selector: 'app-login',
@@ -22,14 +24,13 @@ import {MatFormFieldModule} from '@angular/material/form-field';
         MatIconButton,
         ReactiveFormsModule,
         MatButton,
-        MatError
+        MatError,
+        AsyncPipe
     ],
     templateUrl: './login.html',
     styleUrl: './login.scss',
 })
 export class Login {
-    loading = false;
-
     form: FormGroup;
 
     hidePassword: boolean = true;
@@ -42,7 +43,8 @@ export class Login {
         private alert: Alert,
         private router: Router,
         private route: ActivatedRoute,
-        protected ffError: FormFieldError
+        protected ffError: FormFieldError,
+        protected loader: Loader,
     ) {
         this.form = this.fb.group({
             username: ['', Validators.required],
@@ -64,20 +66,16 @@ export class Login {
     submit() {
         if (this.form.invalid) return;
 
-        this.loading = true;
 
         const { username, password } = this.form.value;
 
         this.auth.login(username, password)
-            .pipe(
-                finalize(() => {
-                    this.loading = false;
-                })
-            )
             .subscribe({
                 next: () => {
                     this.alert.success('Login successful');
-                    this.router.navigateByUrl(this.returnUrl);
+                    queueMicrotask(() => {
+                        this.router.navigateByUrl(this.returnUrl);
+                    });
                 },
                 error: (err) => {
                     this.alert.error(

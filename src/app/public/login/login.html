@@ -41,8 +41,12 @@
                     color="primary"
                     class="w-100"
                     type="submit"
-                    [disabled]="loading || form.invalid"
-                >{{ loading ? 'Signing in…' : 'Login' }}
+                    [disabled]="(loader.loading$ | async) || form.invalid"
+                >@if (loader.loading$ | async){
+                    Signing in…
+                } @else {
+                    Login
+                }
                 </button>
             </form>
 

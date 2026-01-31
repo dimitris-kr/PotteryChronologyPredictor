@@ -30,12 +30,14 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     return next(authReq).pipe(
         catchError((error: HttpErrorResponse) => {
 
-            if (error.status === 401) {
+            if (error.status === 401 ) {
                 auth.logout();
                 alert.error('Session expired. Please log in again.');
-                router.navigate(['/login'], {
-                    queryParams: { returnUrl: router.url },
-                });
+                if (!router.url.startsWith('/login')) {
+                    router.navigate(['/login'], {
+                        queryParams: { returnUrl: router.url },
+                    });
+                }
             }
 
             return throwError(() => error);

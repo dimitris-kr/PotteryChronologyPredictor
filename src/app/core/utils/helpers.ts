@@ -12,3 +12,11 @@ export function formatYear(year: number): string {
     else if (year > 0) return `${yearAbs} AD`;
     else return `${yearAbs}`;
 }
+
+export function cleanParams<T extends Record<string, any>>(obj: T): { [p: string]: any } {
+    return Object.fromEntries(
+        Object.entries(obj).filter(
+            ([_, v]) => v !== null && v !== undefined && v !== ''
+        )
+    );
+}

@@ -1,100 +1,171 @@
-<div class="card flex column gap-4 p-4 predictions">
+<div class="inner">
+    <div class="px-4">
+        <h1>Predictions</h1>
+        <p>Here you can find all past predictions made on the app.</p>
+    </div>
 
-    <table mat-table [dataSource]="dataSource">
-
-        <!-- ID -->
-        <ng-container matColumnDef="id">
-            <th mat-header-cell *matHeaderCellDef>#</th>
-            <td mat-cell *matCellDef="let p">{{ p.id }}</td>
-        </ng-container>
-
-        <!-- Input -->
-        <ng-container matColumnDef="inputImage">
-            <th mat-header-cell *matHeaderCellDef>Input Image</th>
-            <td mat-cell *matCellDef="let p">
-                <div class="image-container">
-                    @if (p.input_image_path) {
-                        @if (imageUrls.get(p.id)) {
-                            <img
-                                [src]="imageUrls.get(p.id)"
-                                loading="lazy"
-                                alt="Pottery Image"
-                            >
-                            <!--                            [src]="getApiUrl('images') + '/' + p.input_image_path"-->
-                        } @else {
-                            <mat-spinner diameter="25"></mat-spinner>
-                        }
-                    }
+    <div class="card">
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title><h6 class="m-0">Filters @if(activeFilters()){*}</h6></mat-panel-title>
+            </mat-expansion-panel-header>
+            <form [formGroup]="filtersForm" class="flex row wrap justify-between gy-1">
+                <div class="w-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Input type</mat-label>
+                        <mat-select formControlName="input_type">
+                            <mat-option [value]="undefined">All</mat-option>
+                            <mat-option value="image">Image</mat-option>
+                            <mat-option value="text">Description</mat-option>
+                            <mat-option value="text_image">Image + Description</mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
-            </td>
-        </ng-container>
+                <div class="w-3">
 
-        <ng-container matColumnDef="inputText">
-            <th mat-header-cell *matHeaderCellDef>Input Description</th>
-            <td mat-cell *matCellDef="let p">
-                @if (p.input_text) {
-                    {{ shorten(p.input_text) }} ...
-                } @else {
-                    -
+                    <mat-form-field appearance="outline">
+                        <mat-label>Output type</mat-label>
+                        <mat-select formControlName="output_type">
+                            <mat-option [value]="undefined">All</mat-option>
+                            <mat-option value="historical_period">Historical Period</mat-option>
+                            <mat-option value="years">Years</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="w-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Feedback Status</mat-label>
+                        <mat-select formControlName="status">
+                            <mat-option [value]="undefined">All</mat-option>
+                            <mat-option value="pending">Pending</mat-option>
+                            <mat-option value="validated">Validated</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                @if (activeFilters()) {
+                    <div class="w-100">
+                        <button mat-button type="button" (click)="clearFilters()">
+                            Clear filters
+                        </button>
+                    </div>
                 }
-            </td>
-        </ng-container>
 
-        <!-- Output Type -->
-        <ng-container matColumnDef="outputType">
-            <th mat-header-cell *matHeaderCellDef>Output Type</th>
-            <td mat-cell *matCellDef="let p">
-                {{ p.historical_period ? 'Historical Period' : 'Exact Years' }}
-            </td>
-        </ng-container>
+            </form>
 
-        <!-- Model -->
-        <!--<ng-container matColumnDef="model">
-            <th mat-header-cell *matHeaderCellDef>Model</th>
-            <td mat-cell *matCellDef="let p">
-                {{ p.model_version.model.name }} <span>{{ p.model_version.version }}</span>
-            </td>
-        </ng-container>-->
+        </mat-expansion-panel>
+    </div>
 
-        <!-- Result -->
-        <ng-container matColumnDef="result">
-            <th mat-header-cell *matHeaderCellDef>Prediction</th>
-            <td mat-cell *matCellDef="let p">
-                @if (p.historical_period) {
-                    {{ p.historical_period.name }}
-                } @else if (p.start_year && p.end_year) {
-                    {{ formatYear(p.start_year) }} – {{ formatYear(p.end_year) }}
-                }
-            </td>
-        </ng-container>
+    <div class="card flex column gap-4 p-4 predictions">
 
-        <!-- Created -->
-        <ng-container matColumnDef="createdAt">
-            <th mat-header-cell *matHeaderCellDef>Created</th>
-            <td mat-cell *matCellDef="let p">
-                {{ p.created_at | date:'medium' }}
-            </td>
-        </ng-container>
+        <table
+            mat-table
+            [dataSource]="dataSource"
+            matSort
+            matSortDisableClear
+            (matSortChange)="onSortChange($event)"
+            matSortActive="created_at"
+            matSortDirection="desc"
+        >
 
-        <!-- Actions -->
-        <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef></th>
-            <td mat-cell *matCellDef="let p">
-                <button mat-icon-button [routerLink]="['/admin/predictions', p.id]">
-                    <mat-icon>open_in_new</mat-icon>
-                </button>
-            </td>
-        </ng-container>
+            <!-- ID -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header="id">#
+                </th>
+                <td mat-cell *matCellDef="let p">{{ p.id }}</td>
+            </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+            <!-- Input -->
+            <ng-container matColumnDef="inputImage">
+                <th mat-header-cell *matHeaderCellDef>Input Image</th>
+                <td mat-cell *matCellDef="let p">
+                    <div class="image-container">
+                        @if (p.input_image_path) {
+                            @if (imageUrls.get(p.id)) {
+                                <img
+                                    [src]="imageUrls.get(p.id)"
+                                    loading="lazy"
+                                    alt="Pottery Image"
+                                >
+                                <!--                            [src]="getApiUrl('images') + '/' + p.input_image_path"-->
+                            } @else {
+                                <mat-spinner diameter="25"></mat-spinner>
+                            }
+                        }
+                    </div>
+                </td>
+            </ng-container>
 
-    <mat-paginator
-        [length]="total"
-        [pageSize]="pageSize"
-        [pageSizeOptions]="[25, 50, 75, 100]"
-        (page)="loadPage($event)">
-    </mat-paginator>
+            <ng-container matColumnDef="inputText">
+                <th mat-header-cell *matHeaderCellDef>Input Description</th>
+                <td mat-cell *matCellDef="let p">
+                    @if (p.input_text) {
+                        {{ shorten(p.input_text) }} ...
+                    } @else {
+                        -
+                    }
+                </td>
+            </ng-container>
 
+            <!-- Output Type -->
+            <ng-container matColumnDef="outputType">
+                <th mat-header-cell *matHeaderCellDef>Output Type</th>
+                <td mat-cell *matCellDef="let p">
+                    {{ p.historical_period ? 'Historical Period' : 'Exact Years' }}
+                </td>
+            </ng-container>
+
+            <!-- Model -->
+            <!--<ng-container matColumnDef="model">
+                <th mat-header-cell *matHeaderCellDef>Model</th>
+                <td mat-cell *matCellDef="let p">
+                    {{ p.model_version.model.name }} <span>{{ p.model_version.version }}</span>
+                </td>
+            </ng-container>-->
+
+            <!-- Result -->
+            <ng-container matColumnDef="result">
+                <th mat-header-cell *matHeaderCellDef>Prediction</th>
+                <td mat-cell *matCellDef="let p">
+                    @if (p.historical_period) {
+                        {{ p.historical_period.name }}
+                    } @else if (p.start_year && p.end_year) {
+                        {{ formatYear(p.start_year) }} – {{ formatYear(p.end_year) }}
+                    }
+                </td>
+            </ng-container>
+
+            <!-- Created -->
+            <ng-container matColumnDef="createdAt">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header="created_at">Created</th>
+                <td mat-cell *matCellDef="let p">
+                    {{ p.created_at | date:'medium' }}
+                </td>
+            </ng-container>
+
+            <!-- Actions -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let p">
+                    <button mat-icon-button [routerLink]="['/admin/predictions', p.id]">
+                        <mat-icon>open_in_new</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <mat-paginator
+            [length]="total"
+            [pageSize]="params.page.limit"
+            [pageSizeOptions]="[25, 50, 75, 100]"
+            (page)="loadPage($event)">
+        </mat-paginator>
+
+    </div>
 </div>
+

@@ -33,6 +33,9 @@ html {
     --mat-sys-corner-full: 16px;
 
     --mat-sys-outline: var(--black-15);
+    --mat-expansion-container-background-color: transparent;
+    --mat-expansion-header-hover-state-layer-color: transparent;
+    --mat-expansion-container-elevation-shadow: none;
 }
 
 body {
@@ -220,6 +223,7 @@ h5 {
 
 h6 {
     font-size: 15px;
+    text-transform: uppercase;
 }
 
 p {
@@ -320,4 +324,17 @@ body {
 .mdc-data-table__cell,
 .mdc-data-table__header-cell {
     padding: 5px 10px !important;
+}
+
+:root {
+    --mat-sort-arrow-color: var(--orange-00)
+}
+
+// EXPANSION PANEL
+
+.mat-expansion-panel-header {
+    padding: var(--space-1) var(--space-4) !important;
+}
+.mat-expansion-panel-body {
+    padding: 0 var(--space-4) var(--space-4) !important;
 }

@@ -66,3 +66,16 @@ export function isClassification(
 ): p is ClassificationPrediction {
     return p.task === 'classification';
 }
+
+
+export type PredictionSortBy = 'created_at' | 'id';
+
+export type PredictionInputType = 'text' | 'image' | 'text_image';
+export type PredictionOutputType = 'historical_period' | 'years';
+export type PredictionStatus = 'pending' | 'validated';
+
+export interface PredictionFilters {
+    input_type?: PredictionInputType;
+    output_type?: PredictionOutputType;
+    status?: PredictionStatus;
+}

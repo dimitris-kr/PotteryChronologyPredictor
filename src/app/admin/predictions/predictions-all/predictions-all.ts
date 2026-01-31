@@ -8,23 +8,26 @@ import {
     MatTable,
     MatTableDataSource
 } from '@angular/material/table';
-import {Prediction} from '../../../core/models/prediction';
+import {Prediction, PredictionFilters, PredictionSortBy} from '../../../core/models/prediction';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {ApiPredictions} from '../../../core/services/api-predictions';
 import {MatIcon} from '@angular/material/icon';
-import {DatePipe, NgIf, NgOptimizedImage} from '@angular/common';
-import {MatIconButton} from '@angular/material/button';
+import {DatePipe} from '@angular/common';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import {RouterLink} from '@angular/router';
 import {formatYear, shorten} from '../../../core/utils/helpers';
-import {environment} from '../../../../environments/environment';
-import {getApiUrl} from '../../../core/utils/request';
 import {ApiImages} from '../../../core/services/api-images';
-import {forkJoin, tap} from 'rxjs';
+import {debounceTime, forkJoin, tap} from 'rxjs';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {Loader} from '../../../core/services/loader';
+import {MatSort, MatSortModule, Sort} from '@angular/material/sort';
+import {RequestParams, SortOrder} from '../../../core/models/request-params';
+import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {MatFormField, MatLabel} from '@angular/material/input';
+import {MatOption, MatSelect} from '@angular/material/select';
 
 @Component({
-  selector: 'app-predictions-all',
+    selector: 'app-predictions-all',
     imports: [
         MatTable,
         MatColumnDef,
@@ -41,13 +44,24 @@ import {Loader} from '../../../core/services/loader';
         MatHeaderRowDef,
         MatRowDef,
         MatPaginator,
-        MatProgressSpinner
+        MatProgressSpinner,
+        MatSort,
+        MatSortModule,
+        MatExpansionPanel,
+        MatExpansionPanelHeader,
+        MatExpansionPanelTitle,
+        MatFormField,
+        MatLabel,
+        MatSelect,
+        MatOption,
+        ReactiveFormsModule,
+        MatButton
     ],
-  templateUrl: './predictions-all.html',
-  styleUrl: './predictions-all.scss',
+    templateUrl: './predictions-all.html',
+    styleUrl: './predictions-all.scss',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PredictionsAll implements OnInit{
+export class PredictionsAll implements OnInit {
 
     displayedColumns: string[] = [
         'id',
@@ -63,43 +77,60 @@ export class PredictionsAll implements OnInit{
     dataSource = new MatTableDataSource<Prediction>([]);
 
     total = 0;
-    pageSize = 25;
-    pageIndex = 0;
-    loading = false;
+
+    params: RequestParams<PredictionSortBy, PredictionFilters> = {
+        page: {
+            offset: 0,
+            limit: 25,
+        },
+        sort: {
+            sort_by: 'created_at',
+            order: 'desc',
+        },
+        filters: {},
+    };
+
+    filtersForm: FormGroup;
+
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
 
     constructor(
         private predictionsApi: ApiPredictions,
         private imagesApi: ApiImages,
-        private loader: Loader,
-        private cdr: ChangeDetectorRef
-    ) {}
+        private cdr: ChangeDetectorRef,
+        private fb: FormBuilder,
+    ) {
+        this.filtersForm = this.fb.group<PredictionFilters>({
+            input_type: undefined,
+            output_type: undefined,
+            status: undefined,
+        });
+    }
 
     ngOnInit(): void {
         this.loadPage();
+
+        this.filtersForm.valueChanges
+            .pipe(debounceTime(300))
+            .subscribe(filters => {
+                this.params.filters = filters;
+                this.resetPagination();
+                this.loadPage();
+            });
     }
 
     loadPage(event?: PageEvent): void {
         if (event) {
-            this.pageSize = event.pageSize;
-            this.pageIndex = event.pageIndex;
+            this.params.page.limit = event.pageSize;
+            this.params.page.offset = event.pageIndex * event.pageSize;
         }
 
-        const offset = this.pageIndex * this.pageSize;
-
-        this.loading = true;
-        this.loader.show();
-
         this.predictionsApi
-            .getAll(this.pageSize, offset)
+            .getAll(this.params)
             .subscribe(res => {
                 this.dataSource.data = res.items;
                 this.total = res.total;
-                this.loading = false;
-                this.loader.hide();
                 this.cdr.markForCheck();
-                /*for (let p of res.items) {
-                    this.loadImage(p);
-                }*/
                 this.loadImages(res.items);
             });
     }
@@ -124,9 +155,36 @@ export class PredictionsAll implements OnInit{
         });
     }
 
+    onSortChange(sort: Sort): void {
+        if (!sort.direction) return;
+        this.params.sort.sort_by = sort.active as PredictionSortBy;
+        this.params.sort.order = sort.direction as SortOrder;
+
+        this.resetPagination();
+        this.loadPage();
+    }
+
+    resetPagination(): void {
+        this.params.page.offset = 0;
+        this.paginator.pageIndex = 0;
+    }
+
+    clearFilters(): void {
+        this.filtersForm.reset({
+            input_type: undefined,
+            output_type: undefined,
+            status: undefined,
+        });
+    }
+
+    activeFilters(): boolean {
+        const values = this.filtersForm.value;
+        return values.input_type || values.output_type || values.status;
+    }
+
+
     protected readonly shorten = shorten;
     protected readonly formatYear = formatYear;
-    protected readonly getApiUrl = getApiUrl;
 
     ngOnDestroy() {
         for (const url of this.imageUrls.values()) {
