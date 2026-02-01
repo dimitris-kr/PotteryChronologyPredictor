@@ -95,7 +95,7 @@
 .px-6 { padding-left: var(--space-6); padding-right: var(--space-6); }
 
 // MARGIN
-.m-0 { margin: var(--space-0); }
+.m-0 { margin: var(--space-0) !important; }
 
 // TEXT ALIGN
 .text-left { text-align: left; }
@@ -118,7 +118,7 @@
 .w-11 { width: 88% }
 .w-12 { width: 100% }
 
-@media only screen and (max-width: 880px) and (min-width: 767px) {
+@media only screen and (max-width: 900px) and (min-width: 767px) {
     .w-1, .w-2, .w-3, .w-4, .w-5, .w-6, .w-7, .w-8, .w-9, .w-10, .w-11, .w-12 {
         width: 100%;
     }

@@ -8,6 +8,7 @@ import {authGuard} from './core/guards/auth-guard';
 import {authReverseGuard} from './core/guards/auth-reverse-guard';
 import {PredictionsAll} from './admin/predictions/predictions-all/predictions-all';
 import {PredictionsNew} from './admin/predictions/predictions-new/predictions-new';
+import {PredictionsSingle} from './admin/predictions/predictions-single/predictions-single';
 
 export const routes: Routes = [
     /* Public layout */
@@ -62,15 +63,13 @@ export const routes: Routes = [
                     {
                         path: 'new',
                         component: PredictionsNew,
+                    },
+                    {
+                        path: ':id',
+                        component: PredictionsSingle,
                     }
                 ]
             }
-            /*{
-                path: 'feature-a',
-                loadComponent: () =>
-                    import('./admin/feature-a/feature-a.component')
-                        .then(m => m.FeatureAComponent),
-            },*/
         ],
     },
 

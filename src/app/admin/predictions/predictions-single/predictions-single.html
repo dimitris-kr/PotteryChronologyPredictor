@@ -1,0 +1,77 @@
+<div class="inner">
+    <div class="px-4 flex column gap-3">
+        <div class="flex row wrap justify-between align-center">
+            <h1 class="m-0">Predictions</h1>
+            <button mat-icon-button routerLink="/admin/predictions" matTooltip="Back to All Predictions"
+                    matTooltipPosition="above">
+                <mat-icon>close_fullscreen</mat-icon>
+            </button>
+        </div>
+        @if (prediction) {
+            <div class="flex column gap-2">
+                <h3 class="m-0">Prediction #{{ prediction.id }}</h3>
+                <div class="meta flex row wrap gap-3">
+                    <div>
+                        Created: <strong>{{ prediction.created_at | date:'medium' }}</strong>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (prediction) {
+        <div class="flex row wrap justify-between align-stretch gy-4">
+            <div class="w-5 flex align-stretch">
+                <div class="card w-100 p-4 flex column justify-center">
+                    <div class="badge primary card-title">
+                        Predicted {{ isClassification(prediction) ? 'Historical Period' : 'Year Range' }}
+                    </div>
+
+                    @if (isClassification(prediction)) {
+                        <div class="flex row nowrap justify-start align-center gap-2">
+                            <div class="indicator" [ngStyle]="{'background-color': getColor(prediction.historical_period.name)}"></div>
+                            <div class="display m-0">{{ prediction.historical_period.name }}</div>
+                        </div>
+                    } @else {
+                        <div class="display m-0">{{ formatYear(prediction.start_year) }} – {{ formatYear(prediction.end_year) }}</div>
+                    }
+                </div>
+            </div>
+            <div class="w-7 w-100 flex align-stretch">
+                <div class="card p-4 flex column justify-center input-data">
+                    <div class="badge primary card-title">
+                        Input Data
+                    </div>
+                    <div class="flex row wrap justify-between align-stretch gy-3">
+                        <div class="w-7">
+                            <h5>Description</h5>
+                            <p>@if (prediction.input_text) {
+                                {{prediction.input_text}}
+                            } @else {
+                                -
+                            }
+                            </p>
+                        </div>
+                        <div class="w-5">
+                            <h5>Image</h5>
+                            @if (prediction.input_image_path) {
+                                @if (imageUrl) {
+                                    <img
+                                        [src]="imageUrl"
+                                        loading="lazy"
+                                        alt="Pottery Image"
+                                    >
+                                } @else {
+                                    <mat-spinner diameter="25"></mat-spinner>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    }
+</div>
+

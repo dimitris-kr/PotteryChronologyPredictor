@@ -1,5 +1,13 @@
 import {ModelVersion} from './model';
 import {HistoricalPeriod} from './historical-period';
+import {PotteryItem} from './pottery-item';
+
+export type PredictionSortBy = 'created_at' | 'id';
+
+export type PredictionInputType = 'text' | 'image' | 'text_image';
+export type PredictionOutputType = 'historical_period' | 'years';
+export type PredictionStatus = 'pending' | 'validated';
+export type PredictionMatch = 'exact' | 'close' | 'none' | 'unknown';
 
 export interface PredictionBase {
     id: number;
@@ -9,10 +17,14 @@ export interface PredictionBase {
     input_image_path: string | null;
     input_image_url: string | null;
 
-    status: 'pending' | 'validated';
+    status: PredictionStatus;
     created_at: Date;
 
     model_version: ModelVersion;
+
+    pottery_item: PotteryItem | null;
+
+    match: PredictionMatch;
 }
 
 export interface ClassificationBreakdown {
@@ -68,14 +80,9 @@ export function isClassification(
 }
 
 
-export type PredictionSortBy = 'created_at' | 'id';
-
-export type PredictionInputType = 'text' | 'image' | 'text_image';
-export type PredictionOutputType = 'historical_period' | 'years';
-export type PredictionStatus = 'pending' | 'validated';
-
 export interface PredictionFilters {
     input_type?: PredictionInputType;
     output_type?: PredictionOutputType;
     status?: PredictionStatus;
+    match?: PredictionMatch;
 }

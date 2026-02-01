@@ -36,6 +36,8 @@ html {
     --mat-expansion-container-background-color: transparent;
     --mat-expansion-header-hover-state-layer-color: transparent;
     --mat-expansion-container-elevation-shadow: none;
+
+    --mat-sys-on-background: var(--text-color-body);
 }
 
 body {
@@ -165,6 +167,7 @@ body {
 .card {
     border-radius: var(--radius-md);
     background-color: var(--beige-100);
+    position: relative;
 }
 
 .floating {
@@ -187,7 +190,7 @@ body {
     font-weight: 400;
 }
 
-h1, h2, h3 {
+h1, h2, h3, .display {
     font-family: var(--serif-font), serif;
     color: var(--text-color-primary);
     font-weight: 600;
@@ -199,6 +202,10 @@ h4, h5, h6 {
     color: var(--text-color-primary);
     font-weight: 600;
     margin: 0 0 10px;
+}
+
+.display {
+    font-size: 40px;
 }
 
 h1 {
@@ -234,7 +241,13 @@ p:last-child {
     margin-bottom: 0;
 }
 
+strong {
+    color: var(--text-color-secondary);
+}
 
+img {
+    max-width: 100%;
+}
 // ICONS
 
 mat-icon {
@@ -326,6 +339,20 @@ body {
     padding: 5px 10px !important;
 }
 
+table {
+    th {
+        font-size: 14px;
+        font-weight: 600 !important;
+        color: var(--text-color-secondary);
+    }
+
+    td {
+        font-size: 13px;
+        font-weight: 400;
+        color: var(--text-color-body);
+    }
+}
+
 :root {
     --mat-sort-arrow-color: var(--orange-00)
 }
@@ -335,6 +362,64 @@ body {
 .mat-expansion-panel-header {
     padding: var(--space-1) var(--space-4) !important;
 }
+
 .mat-expansion-panel-body {
     padding: 0 var(--space-4) var(--space-4) !important;
+}
+
+// BADGE
+.badge {
+    padding: 3px 8px;
+    border-radius: var(--radius-xs);
+    text-transform: capitalize;
+    width: fit-content;
+
+    &.primary {
+        background-color: var(--beige-20);
+        color: var(--text-color-secondary);
+    }
+
+    &.success {
+        background-color: var(--success);
+        color: white;
+    }
+
+    &.danger {
+        background-color: var(--danger);
+        color: white;
+    }
+
+    &.warning {
+        background-color: var(--warning);
+        color: white;
+    }
+
+    &.disabled {
+        background-color: var(--black-10);
+        color: var(--black-30);
+    }
+
+    &.card-title {
+        position: absolute;
+        top: -12px;
+        left: 18px;
+    }
+}
+
+
+// ICON BUTTON
+.mdc-icon-button .mat-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    color: var(--text-color-accent);
+}
+
+
+// INDICATOR
+
+.indicator {
+    width: 20px;
+    aspect-ratio: 1;
+    border-radius: 100%;
 }

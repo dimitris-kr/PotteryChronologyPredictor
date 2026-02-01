@@ -12,10 +12,10 @@ import {Prediction, PredictionFilters, PredictionSortBy} from '../../../core/mod
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {ApiPredictions} from '../../../core/services/api-predictions';
 import {MatIcon} from '@angular/material/icon';
-import {DatePipe} from '@angular/common';
+import {DatePipe, NgClass} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {RouterLink} from '@angular/router';
-import {formatYear, shorten} from '../../../core/utils/helpers';
+import {formatYear, matchExplanation, shorten} from '../../../core/utils/helpers';
 import {ApiImages} from '../../../core/services/api-images';
 import {debounceTime, forkJoin, tap} from 'rxjs';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
@@ -25,6 +25,7 @@ import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
+import {MatTooltip} from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-predictions-all',
@@ -55,7 +56,9 @@ import {MatOption, MatSelect} from '@angular/material/select';
         MatSelect,
         MatOption,
         ReactiveFormsModule,
-        MatButton
+        MatButton,
+        NgClass,
+        MatTooltip
     ],
     templateUrl: './predictions-all.html',
     styleUrl: './predictions-all.scss',
@@ -70,6 +73,8 @@ export class PredictionsAll implements OnInit {
         'outputType',
         // 'model',
         'result',
+        'feedback',
+        'match',
         'createdAt',
         'actions',
     ];
@@ -104,6 +109,7 @@ export class PredictionsAll implements OnInit {
             input_type: undefined,
             output_type: undefined,
             status: undefined,
+            match: undefined,
         });
     }
 
@@ -174,12 +180,13 @@ export class PredictionsAll implements OnInit {
             input_type: undefined,
             output_type: undefined,
             status: undefined,
+            match: undefined,
         });
     }
 
     activeFilters(): boolean {
         const values = this.filtersForm.value;
-        return values.input_type || values.output_type || values.status;
+        return values.input_type || values.output_type || values.status || values.match;
     }
 
 
@@ -191,4 +198,6 @@ export class PredictionsAll implements OnInit {
             URL.revokeObjectURL(url);
         }
     }
+
+    protected readonly matchExplanation = matchExplanation;
 }

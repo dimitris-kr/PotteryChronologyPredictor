@@ -19,6 +19,18 @@ table .image-container {
     overflow-x: auto;
 }
 
+.mat-column-inputImage {
+    width: 50px;
+}
+
+.mat-column-inputText {
+    width: 20%;
+    min-width: 130px;
+}
+
+.mat-column-createdAt {
+    width: 100px;
+}
 
 
 
