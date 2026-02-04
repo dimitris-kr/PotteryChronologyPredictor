@@ -1,4 +1,14 @@
 .input-data {
+    .image-container {
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        background-color: var(--black-05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 60px;
+    }
+
     img {
         border-radius: var(--radius-md);
     }

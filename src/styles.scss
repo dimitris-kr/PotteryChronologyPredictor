@@ -351,6 +351,30 @@ table {
         font-weight: 400;
         color: var(--text-color-body);
     }
+
+    &.vertical {
+        th, td {
+            text-align: left;
+            padding: 5px;
+            height: 30px;
+            font-size: 15px;
+        }
+
+        tr:not(:last-child) {
+            th, td {
+                border-bottom: 1px solid var(--black-15);
+            }
+        }
+
+        th {
+            font-weight: 400 !important;
+            color: var(--text-color-body);
+        }
+        td {
+            font-weight: 500;
+            color: var(--text-color-primary);
+        }
+    }
 }
 
 :root {
@@ -373,6 +397,8 @@ table {
     border-radius: var(--radius-xs);
     text-transform: capitalize;
     width: fit-content;
+    font-weight: 600;
+    font-size: 13px;
 
     &.primary {
         background-color: var(--beige-20);

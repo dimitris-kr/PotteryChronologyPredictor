@@ -3,7 +3,7 @@ import {isClassification, Prediction} from '../../../core/models/prediction';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {ApiPredictions} from '../../../core/services/api-predictions';
 import {filter, map, switchMap} from 'rxjs';
-import {DatePipe, NgStyle} from '@angular/common';
+import {DatePipe, DecimalPipe, NgStyle, PercentPipe} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
 import {MatIconButton} from '@angular/material/button';
 import {MatTooltip} from '@angular/material/tooltip';
@@ -20,7 +20,9 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
         RouterLink,
         DatePipe,
         NgStyle,
-        MatProgressSpinner
+        MatProgressSpinner,
+        PercentPipe,
+        DecimalPipe
     ],
   templateUrl: './predictions-single.html',
   styleUrl: './predictions-single.scss',
@@ -62,4 +64,6 @@ export class PredictionsSingle {
     protected readonly isClassification = isClassification;
     protected readonly getColor = getColor;
     protected readonly formatYear = formatYear;
+    protected readonly Math = Math;
+    protected readonly length = length;
 }

@@ -29,11 +29,14 @@
 
                     @if (isClassification(prediction)) {
                         <div class="flex row nowrap justify-start align-center gap-2">
-                            <div class="indicator" [ngStyle]="{'background-color': getColor(prediction.historical_period.name)}"></div>
+                            <div class="indicator"
+                                 [ngStyle]="{'background-color': getColor(prediction.historical_period.name)}"></div>
                             <div class="display m-0">{{ prediction.historical_period.name }}</div>
                         </div>
                     } @else {
-                        <div class="display m-0">{{ formatYear(prediction.start_year) }} – {{ formatYear(prediction.end_year) }}</div>
+                        <div class="display m-0">{{ formatYear(prediction.start_year) }}
+                            – {{ formatYear(prediction.end_year) }}
+                        </div>
                     }
                 </div>
             </div>
@@ -46,7 +49,7 @@
                         <div class="w-7">
                             <h5>Description</h5>
                             <p>@if (prediction.input_text) {
-                                {{prediction.input_text}}
+                                {{ prediction.input_text }}
                             } @else {
                                 -
                             }
@@ -55,21 +58,153 @@
                         <div class="w-5">
                             <h5>Image</h5>
                             @if (prediction.input_image_path) {
-                                @if (imageUrl) {
-                                    <img
-                                        [src]="imageUrl"
-                                        loading="lazy"
-                                        alt="Pottery Image"
-                                    >
-                                } @else {
-                                    <mat-spinner diameter="25"></mat-spinner>
-                                }
+                                <div class="image-container">
+                                    @if (imageUrl) {
+
+                                        <img
+                                            [src]="imageUrl"
+                                            loading="lazy"
+                                            alt="Pottery Image"
+                                        >
+
+
+                                    } @else {
+                                        <mat-spinner diameter="25"></mat-spinner>
+                                    }
+                                </div>
                             }
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="flex column gap-4">
+
+
+            @if (prediction.status === "validated" && prediction.pottery_item) {
+                <div class="px-4">
+                    <h3>Feedback: True Chronology</h3>
+                    <p>
+                        Feedback has been given for this prediction, with the true chronology of the input data:
+                    </p>
+                </div>
+                <div class="flex row wrap justify-between align-stretch gy-4">
+                    @if (prediction.pottery_item.chronology_label) {
+
+                        <div class="w-5 flex align-stretch">
+                            <div class="card w-100 p-4 flex column justify-center">
+                                <div class="badge primary card-title">
+                                    True Historical Period
+                                </div>
+                                <div class="flex row nowrap justify-start align-center gap-2">
+                                    <div class="indicator"
+                                         [ngStyle]="{'background-color': getColor(prediction.pottery_item.chronology_label.historical_period.name)}"></div>
+                                    <div
+                                        class="display m-0">{{ prediction.pottery_item.chronology_label.historical_period.name }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-5 flex align-stretch">
+                            <div class="card w-100 p-4 flex column justify-center">
+                                <div class="badge primary card-title">
+                                    True Year Range
+                                </div>
+
+                                <div
+                                    class="display m-0">{{ formatYear(prediction.pottery_item.chronology_label.start_year) }}
+                                    – {{ formatYear(prediction.pottery_item.chronology_label.end_year) }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="w-2 flex align-stretch">
+                            <div class="card w-100 p-4 flex column justify-center">
+                                <div class="badge primary card-title">
+                                    Connected Pottery Item
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            } @else {
+                <div class="px-4">
+                    <h3 class="m-0">Feedback: True Chronology</h3>
+                </div>
+            }
+
+        </div>
+
+        <div class="flex column gap-4">
+            <div class="px-4">
+                <h3 class="m-0">Prediction Breakdown</h3>
+            </div>
+
+            <div class="flex row wrap align-stretch gy-4">
+                <div class="w-5 flex align-stretch">
+                    <div class="card p-4 w-100">
+                        <div class="badge primary card-title">
+                            Predictive Model Used
+                        </div>
+
+                        <table class="vertical w-100">
+                            <tbody>
+                            <tr>
+                                <th>Name</th>
+                                <td><span class="word-break-all">{{ prediction.model_version.model.name }}</span></td>
+                            </tr>
+                            <tr>
+                                <th>Version</th>
+                                <td>{{ prediction.model_version.version }}</td>
+                            </tr>
+                            <tr>
+                                <th>Input</th>
+                                <td>
+                                    @for (ft of prediction.model_version.model.feature_sets; track ft.id; let idx = $index) {
+                                        {{ ft.data_type }}
+                                        @if (idx < prediction.model_version.model.feature_sets.length - 1) {
+                                            &
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Output</th>
+                                <td>
+                                    @for (t of prediction.model_version.model.targets; track t.id; let idx = $index) {
+                                        {{ t.name }}
+                                        @if (idx < prediction.model_version.model.targets.length - 1) {
+                                            &
+                                        }
+                                    }
+                                </td>
+                            </tr>
+                                @if (prediction.model_version.val_accuracy) {
+                                    <tr>
+                                        <th>Accuracy</th>
+                                        <td>{{ prediction.model_version.val_accuracy | percent:'1.0-2' }}</td>
+                                    </tr>
+                                } @else if (prediction.model_version.val_mae) {
+                                    <tr>
+                                        <th>Avg. Difference</th>
+                                        <td>±{{ prediction.model_version.val_mae | number: '1.0-0' }} years</td>
+                                    </tr>
+                                }
+                            <tr>
+                                <th>Train Set</th>
+                                <td>{{ prediction.model_version.train_sample_size }} samples</td>
+                            </tr>
+                            <tr>
+                                <th>Trained</th>
+                                <td>{{ prediction.model_version.created_at | date: 'medium' }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
 
         </div>
     }
