@@ -81,57 +81,118 @@
 
         <div class="flex column gap-4">
 
+            <div class="px-4">
+                <div class="flex row wrap justify-start align-center gap-2">
+                    <h3>Feedback: True Chronology</h3>
+                    <div class="badge" [ngClass]="getStatusClass(prediction)">
+                        {{ prediction.status }}
+                    </div>
+                </div>
+
+                @if (prediction.status === "validated" && prediction.pottery_item) {
+                    <p>Feedback with the true chronology of the input data has been given for this prediction.</p>
+                } @else {
+                    <h6>Is this prediction correct?</h6>
+                    <p>
+                        Give feedback to the model, by submitting the true chronology for this input data. This helps
+                        the model learn and make better predictions in the future.
+                    </p>
+                    <p>
+                        After submitting true chronology this data will be inserted in the pottery dataset as a new
+                        pottery item.
+                    </p>
+                }
+
+            </div>
 
             @if (prediction.status === "validated" && prediction.pottery_item) {
-                <div class="px-4">
-                    <h3>Feedback: True Chronology</h3>
-                    <p>
-                        Feedback has been given for this prediction, with the true chronology of the input data:
-                    </p>
-                </div>
+
                 <div class="flex row wrap justify-between align-stretch gy-4">
                     @if (prediction.pottery_item.chronology_label) {
-
-                        <div class="w-5 flex align-stretch">
-                            <div class="card w-100 p-4 flex column justify-center">
-                                <div class="badge primary card-title">
-                                    True Historical Period
-                                </div>
-                                <div class="flex row nowrap justify-start align-center gap-2">
-                                    <div class="indicator"
-                                         [ngStyle]="{'background-color': getColor(prediction.pottery_item.chronology_label.historical_period.name)}"></div>
-                                    <div
-                                        class="display m-0">{{ prediction.pottery_item.chronology_label.historical_period.name }}
+                        @if (isClassification(prediction)) {
+                            <div class="w-5 flex align-stretch">
+                                <div class="card w-100 p-4 flex column justify-center">
+                                    <div class="badge primary card-title">
+                                        True Historical Period
+                                    </div>
+                                    <div class="flex row nowrap justify-start align-center gap-2">
+                                        <div class="indicator"
+                                             [ngStyle]="{'background-color': getColor(prediction.pottery_item.chronology_label.historical_period.name)}"></div>
+                                        <div
+                                            class="display m-0">{{ prediction.pottery_item.chronology_label.historical_period.name }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="w-5 flex align-stretch">
-                            <div class="card w-100 p-4 flex column justify-center">
-                                <div class="badge primary card-title">
-                                    True Year Range
-                                </div>
+                        } @else {
+                            <div class="w-5 flex align-stretch">
+                                <div class="card w-100 p-4 flex column justify-center">
+                                    <div class="badge primary card-title">
+                                        True Year Range
+                                    </div>
 
-                                <div
-                                    class="display m-0">{{ formatYear(prediction.pottery_item.chronology_label.start_year) }}
-                                    – {{ formatYear(prediction.pottery_item.chronology_label.end_year) }}
+                                    <div
+                                        class="display m-0">{{ formatYear(prediction.pottery_item.chronology_label.start_year) }}
+                                        – {{ formatYear(prediction.pottery_item.chronology_label.end_year) }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="w-2 flex align-stretch">
+                        }
+                        <div class="w-3 flex align-stretch">
                             <div class="card w-100 p-4 flex column justify-center">
                                 <div class="badge primary card-title">
-                                    Connected Pottery Item
+                                    Comparison
                                 </div>
+                                <div class="badge" [ngClass]="getMatchClass(prediction)"
+                                     [matTooltip]="matchExplanation(prediction)" matTooltipPosition="above"
+                                     style="font-size: 15px">
+                                    {{ prediction.match === 'none' ? 'No' : prediction.match }} Match
+                                </div>
+                                <small>between predicted and true chronology</small>
                             </div>
                         </div>
                     }
+
+                    <div class="w-4 flex align-stretch">
+                        <div class="card w-100 p-4 flex column justify-center">
+                            <div class="badge primary card-title">
+                                Connected Pottery Item
+                            </div>
+                            <table class="vertical w-100">
+                                <tr>
+                                    <th colspan="2"><h5>Pottery Item #{{ prediction.pottery_item.id }}</h5></th>
+                                </tr>
+                                @if (prediction.pottery_item.chronology_label) {
+                                <tr>
+                                    <th>
+                                        Chronology
+                                    </th>
+                                    <td>
+                                        {{ formatYear(prediction.pottery_item.chronology_label.start_year) }}
+                                        – {{ formatYear(prediction.pottery_item.chronology_label.end_year) }} <br>
+                                        {{ prediction.pottery_item.chronology_label.historical_period.name }} Period
+                                    </td>
+                                </tr>
+                                }
+                                <tr>
+                                    <th>Created</th>
+                                    <td>
+                                        {{prediction.pottery_item.created_at | date: 'medium'}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <button mat-button [routerLink]="['/admin/data', prediction.pottery_item.id]">
+                                            View Pottery Item
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
             } @else {
-                <div class="px-4">
-                    <h3 class="m-0">Feedback: True Chronology</h3>
-                </div>
             }
 
         </div>
@@ -141,7 +202,24 @@
                 <h3 class="m-0">Prediction Breakdown</h3>
             </div>
 
-            <div class="flex row wrap align-stretch gy-4">
+            <div class="flex row wrap justify-between align-stretch gy-4">
+                @if (prediction.breakdown) {
+                    @if (isClassification(prediction)) {
+                        <div class="w-7 flex align-stretch">
+                            <div class="card p-4 w-100">
+                                <div class="badge primary card-title">
+                                    Predicted Period Probabilities
+                                </div>
+
+                                <app-classification-breakdown-chart [breakdown]="prediction.breakdown">
+                                </app-classification-breakdown-chart>
+                            </div>
+                        </div>
+                    } @else {
+
+                    }
+                }
+
                 <div class="w-5 flex align-stretch">
                     <div class="card p-4 w-100">
                         <div class="badge primary card-title">

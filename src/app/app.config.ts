@@ -7,6 +7,21 @@ import {authInterceptor} from './core/interceptors/auth-interceptor';
 import {loaderInterceptor} from './core/interceptors/loader-interceptor';
 import {errorInterceptor} from './core/interceptors/error-interceptor';
 
+// Echarts
+import { provideEchartsCore } from 'ngx-echarts';
+
+import * as echarts from 'echarts/core';
+import { PieChart } from 'echarts/charts';
+import { TooltipComponent, LegendComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+
+echarts.use([
+    PieChart,
+    TooltipComponent,
+    LegendComponent,
+    CanvasRenderer,
+]);
+
 export const appConfig: ApplicationConfig = {
     providers: [
         provideBrowserGlobalErrorListeners(),
@@ -14,5 +29,6 @@ export const appConfig: ApplicationConfig = {
         provideHttpClient(
             withInterceptors([authInterceptor, loaderInterceptor, errorInterceptor]),
         ),
+        provideEchartsCore({echarts})
     ]
 };

@@ -3,13 +3,22 @@ import {isClassification, Prediction} from '../../../core/models/prediction';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {ApiPredictions} from '../../../core/services/api-predictions';
 import {filter, map, switchMap} from 'rxjs';
-import {DatePipe, DecimalPipe, NgStyle, PercentPipe} from '@angular/common';
+import {DatePipe, DecimalPipe, NgClass, NgStyle, PercentPipe} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
-import {MatIconButton} from '@angular/material/button';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatTooltip} from '@angular/material/tooltip';
-import {formatYear, getColor} from '../../../core/utils/helpers';
+import {
+    formatYear,
+    getColor,
+    getMatchClass,
+    getStatusClass,
+    matchExplanation,
+} from '../../../core/utils/helpers';
 import {ApiImages} from '../../../core/services/api-images';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {
+    ClassificationBreakdownChart
+} from '../../../reusable/charts/classification-breakdown-chart/classification-breakdown-chart';
 
 @Component({
   selector: 'app-predictions-single',
@@ -22,7 +31,10 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
         NgStyle,
         MatProgressSpinner,
         PercentPipe,
-        DecimalPipe
+        DecimalPipe,
+        NgClass,
+        MatButton,
+        ClassificationBreakdownChart
     ],
   templateUrl: './predictions-single.html',
   styleUrl: './predictions-single.scss',
@@ -61,9 +73,13 @@ export class PredictionsSingle {
         });
     }
 
+
+
     protected readonly isClassification = isClassification;
     protected readonly getColor = getColor;
     protected readonly formatYear = formatYear;
-    protected readonly Math = Math;
     protected readonly length = length;
+    protected readonly matchExplanation = matchExplanation;
+    protected readonly getStatusClass = getStatusClass;
+    protected readonly getMatchClass = getMatchClass;
 }

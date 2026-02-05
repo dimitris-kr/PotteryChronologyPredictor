@@ -9,4 +9,6 @@ export interface PotteryItem {
 
     data_source: DataSource;
     chronology_label: ChronologyLabel | null;
+
+    created_at: Date;
 }

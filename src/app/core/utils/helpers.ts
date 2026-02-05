@@ -1,4 +1,4 @@
-import {isClassification, Prediction} from '../models/prediction';
+import {isClassification, Prediction, PredictionMatch, PredictionStatus} from '../models/prediction';
 import {HISTORICAL_PERIOD_COLORS} from '../models/historical-period';
 
 export function shorten(text: string, maxWords: number = 10): string {
@@ -49,4 +49,24 @@ export function matchExplanation(prediction: Prediction): string {
 export function getColor(period?: string) {
     if (!period) return null;
     return HISTORICAL_PERIOD_COLORS[period];
+}
+
+export const statusClassMap: Record<PredictionStatus, string> = {
+    validated: 'success',
+    pending: 'warning',
+};
+
+export function getStatusClass(p: Prediction):string {
+    return statusClassMap[p.status];
+}
+
+export const matchClassMap: Record<PredictionMatch, string> = {
+    exact: 'success',
+    close: 'warning',
+    none: 'danger',
+    unknown: 'disabled',
+};
+
+export function getMatchClass(p: Prediction): string {
+    return matchClassMap[p.match]
 }

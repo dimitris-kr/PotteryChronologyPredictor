@@ -15,7 +15,7 @@ import {MatIcon} from '@angular/material/icon';
 import {DatePipe, NgClass} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {RouterLink} from '@angular/router';
-import {formatYear, matchExplanation, shorten} from '../../../core/utils/helpers';
+import {formatYear, getMatchClass, matchClassMap, matchExplanation, shorten} from '../../../core/utils/helpers';
 import {ApiImages} from '../../../core/services/api-images';
 import {debounceTime, forkJoin, tap} from 'rxjs';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
@@ -200,4 +200,5 @@ export class PredictionsAll implements OnInit {
     }
 
     protected readonly matchExplanation = matchExplanation;
+    protected readonly getMatchClass = getMatchClass;
 }
