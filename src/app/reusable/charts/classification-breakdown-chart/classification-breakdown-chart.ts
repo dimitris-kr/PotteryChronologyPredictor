@@ -42,6 +42,7 @@ export class ClassificationBreakdownChart implements OnChanges{
             },
 
             legend: {
+                show: false,
                 orient: 'vertical',
                 right: 10,
                 top: 'middle',
@@ -59,7 +60,7 @@ export class ClassificationBreakdownChart implements OnChanges{
                 {
                     type: 'pie',
                     radius: ['60%', '90%'], // donut
-                    center: ['35%', '50%'],
+                    center: ['50%', '50%'],
                     avoidLabelOverlap: false,
                     padAngle: 1,
 
@@ -70,7 +71,7 @@ export class ClassificationBreakdownChart implements OnChanges{
 
                     emphasis: {
                         label: {
-                            show: true,
+                            show: false,
                             fontSize: 16,
                             fontWeight: 'bold',
                             formatter: '{b}\n{d}%',

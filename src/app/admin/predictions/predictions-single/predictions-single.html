@@ -210,13 +210,95 @@
                                 <div class="badge primary card-title">
                                     Predicted Period Probabilities
                                 </div>
+                                <div class="flex row wrap justify-center align-center gap-3">
+                                    <app-classification-breakdown-chart [breakdown]="prediction.breakdown">
+                                    </app-classification-breakdown-chart>
 
-                                <app-classification-breakdown-chart [breakdown]="prediction.breakdown">
-                                </app-classification-breakdown-chart>
+                                    <div class="legend-wrapper">
+                                        <h6>Probability of Pottery Item belonging in each Period</h6>
+                                        <table class="vertical legend w-100">
+                                            @for (probability of sortedProbabilities; track probability.name;) {
+                                                <tr>
+                                                    <th>
+                                                        <div class="flex row nowrap justify-start align-center gap-1">
+                                                            <div class="indicator small"
+                                                                 [ngStyle]="{'background-color': getColor(probability.name)}"></div>
+                                                            <div>
+                                                                {{ probability.name }}
+                                                            </div>
+                                                        </div>
+                                                    </th>
+                                                    <td>
+                                                        {{ probability.value | percent:'1.2-2' }}
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+
+                                </div>
+
                             </div>
                         </div>
                     } @else {
+                        @if(prediction.breakdown.start_year) {
 
+                        <div class="w-7 flex align-stretch">
+                            <div class="card p-4 w-100 flex column gap-3">
+                                <div class="badge primary card-title">
+                                    Start Year Analysis
+                                </div>
+                                <app-regression-breakdown-chart
+                                    [breakdown]="prediction.breakdown.start_year"
+                                ></app-regression-breakdown-chart>
+
+                                <table class="vertical w-100">
+                                    <tr>
+                                        <th>Model Uncertainty (STD)</th>
+                                        <td>±{{ prediction.breakdown.start_year.std }} years </td>
+                                    </tr>
+                                    <tr>
+                                        <th>95% Confidence Interval</th>
+                                        <td>{{formatYear(prediction.breakdown.start_year.ci_lower)}} - {{formatYear(prediction.breakdown.start_year.ci_upper)}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Confidence Width</th>
+                                        <td>{{Math.abs(prediction.breakdown.start_year.ci_upper - prediction.breakdown.start_year.ci_lower)}} years</td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+                        }
+
+                        @if(prediction.breakdown.year_range) {
+
+                            <div class="w-5 flex align-stretch">
+                                <div class="card p-4 w-100 flex column gap-3">
+                                    <div class="badge primary card-title">
+                                        Year Range Analysis
+                                    </div>
+                                    <app-regression-breakdown-chart
+                                        [breakdown]="prediction.breakdown.year_range"
+                                    ></app-regression-breakdown-chart>
+
+                                    <table class="vertical w-100">
+                                        <tr>
+                                            <th>Model Uncertainty (STD)</th>
+                                            <td>±{{ prediction.breakdown.year_range.std }} years </td>
+                                        </tr>
+                                        <tr>
+                                            <th>95% Confidence Interval</th>
+                                            <td>{{prediction.breakdown.year_range.ci_lower}} - {{prediction.breakdown.year_range.ci_upper}} years</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Confidence Width</th>
+                                            <td>{{Math.abs(prediction.breakdown.year_range.ci_upper - prediction.breakdown.year_range.ci_lower)}} years</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        }
                     }
                 }
 

@@ -13,3 +13,22 @@
         border-radius: var(--radius-md);
     }
 }
+
+.legend-wrapper{
+    max-width: 160px;
+
+    table.vertical.legend {
+        td {
+            font-weight: 400;
+            color: var(--text-color-body);
+            text-align: right;
+        }
+
+        tr:first-child {
+            th,td {
+                font-weight: 600 !important;
+                color: var(--text-color-secondary);
+            }
+        }
+    }
+}

@@ -19,6 +19,7 @@ import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {
     ClassificationBreakdownChart
 } from '../../../reusable/charts/classification-breakdown-chart/classification-breakdown-chart';
+import {RegressionBreakdownChart} from '../../../reusable/charts/regression-breakdown-chart/regression-breakdown-chart';
 
 @Component({
   selector: 'app-predictions-single',
@@ -34,7 +35,8 @@ import {
         DecimalPipe,
         NgClass,
         MatButton,
-        ClassificationBreakdownChart
+        ClassificationBreakdownChart,
+        RegressionBreakdownChart
     ],
   templateUrl: './predictions-single.html',
   styleUrl: './predictions-single.scss',
@@ -73,6 +75,14 @@ export class PredictionsSingle {
         });
     }
 
+    get sortedProbabilities(): Array<{ name: string; value: number }> {
+        if (!this.prediction || !isClassification(this.prediction) || !this.prediction.breakdown) return [];
+
+        return Object.entries(this.prediction.breakdown.probabilities)
+            .map(([name, value]) => ({ name, value }))
+            .sort((a, b) => b.value - a.value);
+    }
+
 
 
     protected readonly isClassification = isClassification;
@@ -82,4 +92,5 @@ export class PredictionsSingle {
     protected readonly matchExplanation = matchExplanation;
     protected readonly getStatusClass = getStatusClass;
     protected readonly getMatchClass = getMatchClass;
+    protected readonly Math = Math;
 }
