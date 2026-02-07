@@ -27,6 +27,9 @@ export class RegressionBreakdownChart {
 
 
     private buildOption(): void {
+        const color_ci = '#c3bebc';
+        const color_std = '#9f9e9c';
+        const color_pred = '#D6614A';
         this.option = {
             grid: {
                 left: 0,
@@ -42,7 +45,7 @@ export class RegressionBreakdownChart {
                 axisLine: {show: false},
                 axisTick: {show: false},
                 axisLabel: {
-                    color: '#9A9A9A',
+                    color: '#CDC9C6',
                 },
                 splitLine: {
                     lineStyle: {
@@ -61,6 +64,9 @@ export class RegressionBreakdownChart {
 
             series: [
                 {
+                    /**
+                     * Confidence Interval LINE
+                     */
                     name: 'Confidence Interval',
                     type: 'line',
                     data: [
@@ -68,25 +74,25 @@ export class RegressionBreakdownChart {
                         [this.breakdown.ci_upper, 0]
                     ],
                     lineStyle: {
-                        color: '#CDC9C6',
+                        color: color_ci,
                         width: 4
                     },
                     symbol: 'circle',
                     symbolSize: 12,
                     itemStyle: {
-                        color: '#CDC9C6',
+                        color: color_ci,
                     },
                     label: {
                         show: true,
                         position: 'top',
-                        color: '#CDC9C6',
+                        color: color_ci,
                         fontWeight: 400
                     },
                     z: 0
                 },
 
                 /**
-                 * Prediction line
+                 * STD LINE
                  */
                 {
                     name: 'STD',
@@ -96,18 +102,18 @@ export class RegressionBreakdownChart {
                         [this.breakdown.prediction + this.breakdown.std, 0]
                     ],
                     lineStyle: {
-                        color: '#ABA9A7',
+                        color: color_std,
                         width: 4
                     },
                     symbol: 'circle',
                     symbolSize: 12,
                     itemStyle: {
-                        color: '#ABA9A7',
+                        color: color_std,
                     },
                     label: {
                         show: true,
                         position: 'top',
-                        color: '#ABA9A7',
+                        color: color_std,
                         fontWeight: 400
                     },
                     z: 50
@@ -122,13 +128,13 @@ export class RegressionBreakdownChart {
                     data: [[this.breakdown.prediction, 0]],
                     symbolSize: 16,
                     itemStyle: {
-                        color: '#D6614A',
+                        color: color_pred,
                         opacity: 1,
                     },
                     label: {
                         show: true,
                         position: 'top',
-                        color: '#D6614A',
+                        color: color_pred,
                         fontWeight: 600
                     },
                     z: 100

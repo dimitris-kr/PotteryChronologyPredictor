@@ -3,7 +3,7 @@
         <div class="flex row wrap justify-between align-center">
             <h1 class="m-0">Predictions</h1>
             <button mat-icon-button routerLink="/admin/predictions" matTooltip="Back to All Predictions"
-                    matTooltipPosition="above">
+                    matTooltipPosition="above" >
                 <mat-icon>close_fullscreen</mat-icon>
             </button>
         </div>
@@ -72,6 +72,8 @@
                                         <mat-spinner diameter="25"></mat-spinner>
                                     }
                                 </div>
+                            } @else {
+                                -
                             }
                         </div>
                     </div>
@@ -154,7 +156,7 @@
                     }
 
                     <div class="w-4 flex align-stretch">
-                        <div class="card w-100 p-4 flex column justify-center">
+                        <div class="card w-100 p-4 flex column justify-center gap-2">
                             <div class="badge primary card-title">
                                 Connected Pottery Item
                             </div>
@@ -180,14 +182,10 @@
                                         {{prediction.pottery_item.created_at | date: 'medium'}}
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td colspan="2">
-                                        <button mat-button [routerLink]="['/admin/data', prediction.pottery_item.id]">
-                                            View Pottery Item
-                                        </button>
-                                    </td>
-                                </tr>
                             </table>
+                            <a mat-button [routerLink]="['/admin/data', prediction.pottery_item.id]" class="border">
+                                View Pottery Item
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -202,7 +200,7 @@
                 <h3 class="m-0">Prediction Breakdown</h3>
             </div>
 
-            <div class="flex row wrap justify-between align-stretch gy-4">
+            <div class="flex row wrap justify-between align-stretch gy-5">
                 @if (prediction.breakdown) {
                     @if (isClassification(prediction)) {
                         <div class="w-7 flex align-stretch">
@@ -367,6 +365,48 @@
             </div>
 
         </div>
+
+        <div class="flex column gap-3">
+            <div class="px-4">
+                <h3 class="m-0">More Actions</h3>
+            </div>
+
+            <div class="card p-4 flex row wrap justify-between align-center gap-3">
+                <div class="w-auto">
+                    <button mat-button class="border danger w-auto" (click)="openDeleteDialog()">
+                        <mat-icon>delete</mat-icon>
+                        <span>Delete Prediction</span>
+                    </button>
+                </div>
+                <div class="flex row wrap gap-2 w-auto">
+                    <a mat-button routerLink="/admin/predictions" class="border w-auto">
+                        View All Predictions
+                    </a>
+                    <a mat-button routerLink="/admin/predictions/new" class="border w-auto">
+                        Make New Prediction
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+        <ng-template #deleteDialog>
+            <h3 mat-dialog-title>Are you sure you want to delete Prediction #{{prediction.id}}?</h3>
+            <mat-dialog-content>
+                This action is permanent. You won't be able to restore this prediction.
+            </mat-dialog-content>
+            <mat-dialog-actions>
+                <button mat-button mat-dialog-close>Cancel</button>
+                <button
+                    matButton="filled"
+                    class="danger"
+                    (click)="delete()"
+                >
+                    <mat-icon>delete</mat-icon>
+                    Delete
+                </button>
+            </mat-dialog-actions>
+        </ng-template>
     }
 </div>
 

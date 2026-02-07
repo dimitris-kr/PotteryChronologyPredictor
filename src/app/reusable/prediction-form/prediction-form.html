@@ -95,14 +95,18 @@
 
     <div class="flex justify-start align-center py-3">
         <button
-            mat-flat-button
+            matButton="filled"
             color="primary"
             type="submit"
             class="predict-btn"
-            [disabled]="form.invalid"
+            [disabled]="(loader.loading$ | async) || form.invalid"
         >
             <mat-icon>auto_fix_high</mat-icon>
-            Predict Chronology
+            @if (loader.loading$ | async){
+                Predicting Chronology…
+            } @else {
+                Predict Chronology
+            }
         </button>
     </div>
 

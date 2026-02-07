@@ -1,11 +1,15 @@
-import {ChangeDetectorRef, Component, NgZone} from '@angular/core';
+import {ChangeDetectorRef, Component} from '@angular/core';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatIcon} from '@angular/material/icon';
 import {MatTooltip} from '@angular/material/tooltip';
 import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
-import {JsonPipe} from '@angular/common';
+import {AsyncPipe, JsonPipe} from '@angular/common';
+import {Loader} from '../../core/services/loader';
+import {ApiPredictions} from '../../core/services/api-predictions';
+import {Router} from '@angular/router';
+import {Alert} from '../../core/services/alert';
 
 @Component({
     selector: 'app-prediction-form',
@@ -20,7 +24,8 @@ import {JsonPipe} from '@angular/common';
         MatButtonToggleGroup,
         MatButtonToggle,
         MatButton,
-        JsonPipe
+        JsonPipe,
+        AsyncPipe
     ],
     templateUrl: './prediction-form.html',
     styleUrl: './prediction-form.scss',
@@ -32,7 +37,10 @@ export class PredictionForm {
 
     constructor(
         private formBuilder: FormBuilder,
-        private zone: NgZone,
+        protected loader: Loader,
+        private predictionsApi: ApiPredictions,
+        private alert: Alert,
+        private router: Router,
         private cdr: ChangeDetectorRef
     ) {
         this.form = this.formBuilder.group(
@@ -93,6 +101,30 @@ export class PredictionForm {
     }
 
     submit() {
+        if (this.form.invalid) {
+            this.form.markAllAsTouched();
+            return;
+        }
 
+        const formData = new FormData();
+
+        const values = this.form.value;
+
+        formData.append('task', values.task);
+
+        if (values.text) {
+            formData.append('text', values.text);
+        }
+
+        if (values.image) {
+            formData.append('image', values.image);
+        }
+
+        this.predictionsApi.create(formData).subscribe({
+            next: prediction => {
+                this.alert.success("Prediction created successfully!");
+                this.router.navigate(['/admin/predictions', prediction.id]);
+            }
+        });
     }
 }

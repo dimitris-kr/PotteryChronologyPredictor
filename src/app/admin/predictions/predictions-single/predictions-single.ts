@@ -1,8 +1,8 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
+import {ChangeDetectorRef, Component, TemplateRef, ViewChild} from '@angular/core';
 import {isClassification, Prediction} from '../../../core/models/prediction';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {ApiPredictions} from '../../../core/services/api-predictions';
-import {filter, map, switchMap} from 'rxjs';
+import {filter, finalize, map, switchMap} from 'rxjs';
 import {DatePipe, DecimalPipe, NgClass, NgStyle, PercentPipe} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
@@ -20,6 +20,8 @@ import {
     ClassificationBreakdownChart
 } from '../../../reusable/charts/classification-breakdown-chart/classification-breakdown-chart';
 import {RegressionBreakdownChart} from '../../../reusable/charts/regression-breakdown-chart/regression-breakdown-chart';
+import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
+import {Alert} from '../../../core/services/alert';
 
 @Component({
   selector: 'app-predictions-single',
@@ -36,7 +38,11 @@ import {RegressionBreakdownChart} from '../../../reusable/charts/regression-brea
         NgClass,
         MatButton,
         ClassificationBreakdownChart,
-        RegressionBreakdownChart
+        RegressionBreakdownChart,
+        MatDialogTitle,
+        MatDialogContent,
+        MatDialogActions,
+        MatDialogClose
     ],
   templateUrl: './predictions-single.html',
   styleUrl: './predictions-single.scss',
@@ -45,11 +51,16 @@ export class PredictionsSingle {
     prediction?: Prediction;
     imageUrl?: string;
 
+    @ViewChild('deleteDialog') deleteDialog!: TemplateRef<any>;
+
     constructor(
         private route: ActivatedRoute,
         private predictionsApi: ApiPredictions,
         private imagesApi: ApiImages,
-        private cdr: ChangeDetectorRef
+        private alert: Alert,
+        private router: Router,
+        private cdr: ChangeDetectorRef,
+        private dialogService: MatDialog
     ) {}
 
     ngOnInit(): void {
@@ -81,6 +92,29 @@ export class PredictionsSingle {
         return Object.entries(this.prediction.breakdown.probabilities)
             .map(([name, value]) => ({ name, value }))
             .sort((a, b) => b.value - a.value);
+    }
+
+    openDeleteDialog() {
+        this.dialogService.open(this.deleteDialog, {
+            width: '380px',
+            disableClose: false,
+            autoFocus: false,
+        });
+    }
+
+    delete(){
+        if (!this.prediction) return;
+        this.predictionsApi.delete(this.prediction.id).pipe(
+            finalize(() => {
+                this.dialogService.closeAll();
+            })
+        ).subscribe({
+            next: () => {
+                this.dialogService.closeAll();
+                this.alert.success("Prediction deleted successfully");
+                this.router.navigate(['/admin/predictions']);
+            }
+        });
     }
 
 

@@ -136,7 +136,7 @@ body {
 
 @media only screen and (max-width: 767px) {
     .content {
-        padding: 0;
+        padding: 20px 0;
     }
 
     .admin-layout.mat-drawer-container {
@@ -144,7 +144,7 @@ body {
     }
 
     .mat-sidenav-content {
-        padding: 20px;
+        padding: 0 20px;
         left: 0 !important;
         margin: 0 !important;
     }
@@ -269,10 +269,10 @@ mat-icon {
     height: 46px;
 }
 
-.mdc-button[matbutton="filled"].mat-mdc-unelevated-button:not(:disabled),
+/*.mdc-button[matbutton="filled"].mat-mdc-unelevated-button:not(:disabled),
 .mdc-button[mat-flat-button=""].mat-mdc-unelevated-button:not(:disabled) {
     background-color: var(--orange-00);
-}
+}*/
 
 .mdc-button[matbutton="filled"].mat-mdc-unelevated-button,
 .mdc-button[mat-flat-button=""].mat-mdc-unelevated-button {
@@ -282,7 +282,27 @@ mat-icon {
     font-size: 14px !important;
 }
 
-// FORM
+.mdc-button.border,
+.mdc-icon-button.border {
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--mat-button-text-label-text-color, var(--mat-sys-primary));;
+}
+
+.mdc-button.danger {
+    --mat-button-text-label-text-color: var(--danger);
+}
+
+.mdc-button.danger.border {
+    border-width: 1.5px;
+}
+
+.mdc-button[matbutton="filled"].danger {
+    --mat-button-filled-container-color: var(--danger);
+    color: white;
+}
+
+    // FORM
 .mat-mdc-form-field {
     width: 100%;
 }

@@ -105,7 +105,9 @@
 .word-break-all { word-break: break-all; }
 
 // WIDTH
+.w-auto { width: auto; }
 .w-100 { width: 100% }
+
 .w-1 { width: 8% }
 .w-2 { width: 16% }
 .w-3 { width: 24% }
@@ -119,14 +121,14 @@
 .w-11 { width: 88% }
 .w-12 { width: 100% }
 
-@media only screen and (max-width: 900px) and (min-width: 767px) {
-    .w-1, .w-2, .w-3, .w-4, .w-5, .w-6, .w-7, .w-8, .w-9, .w-10, .w-11, .w-12 {
+@media only screen and (max-width: 920px) and (min-width: 767px) {
+    .w-1, .w-2, .w-3, .w-4, .w-5, .w-6, .w-7, .w-8, .w-9, .w-10, .w-11, .w-12, .w-auto {
         width: 100%;
     }
 }
 
-@media only screen and (max-width: 600px) {
-    .w-1, .w-2, .w-3, .w-4, .w-5, .w-6, .w-7, .w-8, .w-9, .w-10, .w-11, .w-12 {
+@media only screen and (max-width: 680px) {
+    .w-1, .w-2, .w-3, .w-4, .w-5, .w-6, .w-7, .w-8, .w-9, .w-10, .w-11, .w-12, .w-auto {
         width: 100%;
     }
 }
