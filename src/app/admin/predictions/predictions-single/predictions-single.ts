@@ -22,6 +22,8 @@ import {
 import {RegressionBreakdownChart} from '../../../reusable/charts/regression-breakdown-chart/regression-breakdown-chart';
 import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
 import {Alert} from '../../../core/services/alert';
+import {FeedbackConnectForm} from '../../../reusable/feedback-connect-form/feedback-connect-form';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
 
 @Component({
   selector: 'app-predictions-single',
@@ -42,7 +44,10 @@ import {Alert} from '../../../core/services/alert';
         MatDialogTitle,
         MatDialogContent,
         MatDialogActions,
-        MatDialogClose
+        MatDialogClose,
+        FeedbackConnectForm,
+        MatTabGroup,
+        MatTab
     ],
   templateUrl: './predictions-single.html',
   styleUrl: './predictions-single.scss',
@@ -83,6 +88,14 @@ export class PredictionsSingle {
         this.imagesApi.getImage(p.input_image_path, 'full').subscribe(blob => {
             this.imageUrl = URL.createObjectURL(blob);
             this.cdr.markForCheck();
+        });
+    }
+
+    reloadPrediction() {
+        if (!this.prediction) return;
+
+        this.predictionsApi.getSingle(this.prediction.id).subscribe(prediction => {
+            this.prediction = prediction;
         });
     }
 

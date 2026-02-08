@@ -1,9 +1,12 @@
 import {DataSource} from './data-source';
 import {ChronologyLabel} from './chronology-label';
 
-export interface PotteryItem {
+export interface PotteryItemBase {
     id: number;
     object_id: string | null;
+}
+
+export interface PotteryItem extends PotteryItemBase {
     description: string | null;
     image_path: string | null;
 

@@ -3,7 +3,7 @@
         <div class="flex row wrap justify-between align-center">
             <h1 class="m-0">Predictions</h1>
             <button mat-icon-button routerLink="/admin/predictions" matTooltip="Back to All Predictions"
-                    matTooltipPosition="above" >
+                    matTooltipPosition="above">
                 <mat-icon>close_fullscreen</mat-icon>
             </button>
         </div>
@@ -96,12 +96,7 @@
                 } @else {
                     <h6>Is this prediction correct?</h6>
                     <p>
-                        Give feedback to the model, by submitting the true chronology for this input data. This helps
-                        the model learn and make better predictions in the future.
-                    </p>
-                    <p>
-                        After submitting true chronology this data will be inserted in the pottery dataset as a new
-                        pottery item.
+                        Give feedback to the model to help it learn and make better predictions in the future.
                     </p>
                 }
 
@@ -164,24 +159,35 @@
                                 <tr>
                                     <th colspan="2"><h5>Pottery Item #{{ prediction.pottery_item.id }}</h5></th>
                                 </tr>
-                                @if (prediction.pottery_item.chronology_label) {
-                                <tr>
-                                    <th>
-                                        Chronology
-                                    </th>
-                                    <td>
-                                        {{ formatYear(prediction.pottery_item.chronology_label.start_year) }}
-                                        – {{ formatYear(prediction.pottery_item.chronology_label.end_year) }} <br>
-                                        {{ prediction.pottery_item.chronology_label.historical_period.name }} Period
-                                    </td>
-                                </tr>
+                                @if (prediction.pottery_item.object_id) {
+                                    <tr>
+                                        <th>
+                                            Object ID
+                                        </th>
+                                        <td>
+                                            {{ prediction.pottery_item.object_id }}
+                                        </td>
+                                    </tr>
                                 }
-                                <tr>
+
+                                @if (prediction.pottery_item.chronology_label) {
+                                    <tr>
+                                        <th>
+                                            Chronology
+                                        </th>
+                                        <td>
+                                            {{ formatYear(prediction.pottery_item.chronology_label.start_year) }}
+                                            – {{ formatYear(prediction.pottery_item.chronology_label.end_year) }} <br>
+                                            {{ prediction.pottery_item.chronology_label.historical_period.name }} Period
+                                        </td>
+                                    </tr>
+                                }
+                                <!--<tr>
                                     <th>Created</th>
                                     <td>
                                         {{prediction.pottery_item.created_at | date: 'medium'}}
                                     </td>
-                                </tr>
+                                </tr>-->
                             </table>
                             <a mat-button [routerLink]="['/admin/data', prediction.pottery_item.id]" class="border">
                                 View Pottery Item
@@ -191,6 +197,32 @@
                 </div>
 
             } @else {
+                <div class="card px-4 py-2">
+                    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+                        <mat-tab label="Connect to Existing Pottery Item">
+                            <div class="py-4 flex column gap-3">
+                                <p>
+                                    Search and select the pottery item with already validated chronology, you wish to
+                                    connect this prediction to.
+                                </p>
+                                <app-feedback-connect-form
+                                    [predictionId]="prediction.id"
+                                    (connected)="reloadPrediction()"
+                                >
+                                </app-feedback-connect-form>
+                            </div>
+
+                        </mat-tab>
+                        <mat-tab label="Create New Pottery Item">
+                            <div class="py-4 flex column gap-2">
+                            <p>
+                                Submit the true chronology for this prediction's input data to create a new pottery item in the pottery dataset.
+                            </p>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+
             }
 
         </div>
@@ -215,7 +247,7 @@
                                     <div class="legend-wrapper">
                                         <h6>Probability of Pottery Item belonging in each Period</h6>
                                         <table class="vertical legend w-100">
-                                            @for (probability of sortedProbabilities; track probability.name;) {
+                                            @for (probability of sortedProbabilities; track probability.name; ) {
                                                 <tr>
                                                     <th>
                                                         <div class="flex row nowrap justify-start align-center gap-1">
@@ -239,37 +271,41 @@
                             </div>
                         </div>
                     } @else {
-                        @if(prediction.breakdown.start_year) {
+                        @if (prediction.breakdown.start_year) {
 
-                        <div class="w-7 flex align-stretch">
-                            <div class="card p-4 w-100 flex column gap-3">
-                                <div class="badge primary card-title">
-                                    Start Year Analysis
+                            <div class="w-7 flex align-stretch">
+                                <div class="card p-4 w-100 flex column gap-3">
+                                    <div class="badge primary card-title">
+                                        Start Year Analysis
+                                    </div>
+                                    <app-regression-breakdown-chart
+                                        [breakdown]="prediction.breakdown.start_year"
+                                    ></app-regression-breakdown-chart>
+
+                                    <table class="vertical w-100">
+                                        <tr>
+                                            <th>Model Uncertainty (STD)</th>
+                                            <td>±{{ prediction.breakdown.start_year.std }} years</td>
+                                        </tr>
+                                        <tr>
+                                            <th>95% Confidence Interval</th>
+                                            <td>{{ formatYear(prediction.breakdown.start_year.ci_lower) }}
+                                                - {{ formatYear(prediction.breakdown.start_year.ci_upper) }}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Confidence Width</th>
+                                            <td>{{ Math.abs(prediction.breakdown.start_year.ci_upper - prediction.breakdown.start_year.ci_lower) }}
+                                                years
+                                            </td>
+                                        </tr>
+                                    </table>
+
                                 </div>
-                                <app-regression-breakdown-chart
-                                    [breakdown]="prediction.breakdown.start_year"
-                                ></app-regression-breakdown-chart>
-
-                                <table class="vertical w-100">
-                                    <tr>
-                                        <th>Model Uncertainty (STD)</th>
-                                        <td>±{{ prediction.breakdown.start_year.std }} years </td>
-                                    </tr>
-                                    <tr>
-                                        <th>95% Confidence Interval</th>
-                                        <td>{{formatYear(prediction.breakdown.start_year.ci_lower)}} - {{formatYear(prediction.breakdown.start_year.ci_upper)}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Confidence Width</th>
-                                        <td>{{Math.abs(prediction.breakdown.start_year.ci_upper - prediction.breakdown.start_year.ci_lower)}} years</td>
-                                    </tr>
-                                </table>
-
                             </div>
-                        </div>
                         }
 
-                        @if(prediction.breakdown.year_range) {
+                        @if (prediction.breakdown.year_range) {
 
                             <div class="w-5 flex align-stretch">
                                 <div class="card p-4 w-100 flex column gap-3">
@@ -283,15 +319,19 @@
                                     <table class="vertical w-100">
                                         <tr>
                                             <th>Model Uncertainty (STD)</th>
-                                            <td>±{{ prediction.breakdown.year_range.std }} years </td>
+                                            <td>±{{ prediction.breakdown.year_range.std }} years</td>
                                         </tr>
                                         <tr>
                                             <th>95% Confidence Interval</th>
-                                            <td>{{prediction.breakdown.year_range.ci_lower}} - {{prediction.breakdown.year_range.ci_upper}} years</td>
+                                            <td>{{ prediction.breakdown.year_range.ci_lower }}
+                                                - {{ prediction.breakdown.year_range.ci_upper }} years
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th>Confidence Width</th>
-                                            <td>{{Math.abs(prediction.breakdown.year_range.ci_upper - prediction.breakdown.year_range.ci_lower)}} years</td>
+                                            <td>{{ Math.abs(prediction.breakdown.year_range.ci_upper - prediction.breakdown.year_range.ci_lower) }}
+                                                years
+                                            </td>
                                         </tr>
                                     </table>
                                 </div>
@@ -391,7 +431,7 @@
         </div>
 
         <ng-template #deleteDialog>
-            <h3 mat-dialog-title>Are you sure you want to delete Prediction #{{prediction.id}}?</h3>
+            <h3 mat-dialog-title>Are you sure you want to delete Prediction #{{ prediction.id }}?</h3>
             <mat-dialog-content>
                 This action is permanent. You won't be able to restore this prediction.
             </mat-dialog-content>

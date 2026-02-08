@@ -1,0 +1,81 @@
+<form [formGroup]="form" class="flex row wrap justify-between align-start gy-3" (ngSubmit)="submit()">
+
+    <div class="w-8">
+        @if (!selectedItem) {
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Search Pottery Item by Object ID</mat-label>
+
+                <input
+                    type="text"
+                    matInput
+                    [formControl]="searchControl"
+                    [matAutocomplete]="auto"
+                    placeholder="Insert Object ID..."
+                />
+
+                <mat-autocomplete
+                    #auto="matAutocomplete"
+                    [displayWith]="displayFn"
+                    (optionSelected)="onOptionSelected($event.option.value)"
+                >
+                    @for (item of results$ | async; track item.id) {
+                        <mat-option [value]="item">
+                            <strong>{{ item.object_id }}</strong>
+                        </mat-option>
+                    }
+
+                </mat-autocomplete>
+                <mat-hint>Type at least 2 characters to start searching</mat-hint>
+                @if (searchControl.hasError('noResults')) {
+                    <mat-error>No pottery items found with this object ID. Create new pottery item. </mat-error>
+                }
+            </mat-form-field>
+        } @else {
+            <div class="selected-item-card">
+
+                <button matIconButton type="button" class="reset-btn" (click)="resetSelection()">
+                    <mat-icon>close</mat-icon>
+                </button>
+
+                <table class="vertical w-100">
+                    <tr>
+                        <th colspan="2"><h5>Pottery Item #{{ selectedItem.id }}</h5></th>
+                    </tr>
+                    @if (selectedItem.object_id) {
+                        <tr>
+                            <th>
+                                Object ID
+                            </th>
+                            <td>
+                                {{ selectedItem.object_id }}
+                            </td>
+                        </tr>
+                    }
+
+                    @if (selectedItem.chronology_label) {
+                        <tr>
+                            <th>
+                                Chronology
+                            </th>
+                            <td>
+                                {{ formatYear(selectedItem.chronology_label.start_year) }}
+                                – {{ formatYear(selectedItem.chronology_label.end_year) }} //
+                                {{ selectedItem.chronology_label.historical_period.name }} Period
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+    </div>
+    <div class="w-4">
+        <button
+            matButton="filled"
+            type="submit"
+            [disabled]="form.invalid"
+            class="w-100"
+        >
+            Connect
+        </button>
+    </div>
+</form>

@@ -94,4 +94,14 @@ export class ApiPredictions {
         } as RegressionPredictionResult;
     }
 
+    giveFeedbackConnect(
+        predictionId: number,
+        potteryItemId: number
+    ): Observable<Prediction> {
+        return this.http.post<Prediction>(
+            `${this.url}/${predictionId}/feedback/connect`,
+            {pottery_item_id: potteryItemId}
+        );
+    }
+
 }
