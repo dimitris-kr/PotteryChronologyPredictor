@@ -15,3 +15,9 @@ export interface PotteryItem extends PotteryItemBase {
 
     created_at: Date;
 }
+
+export interface PotteryItemCreateFromPredictionRequest {
+    object_id: string | null;
+    start_year: number;
+    end_year: number;
+}

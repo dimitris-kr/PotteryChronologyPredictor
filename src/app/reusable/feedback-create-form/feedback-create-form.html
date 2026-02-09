@@ -1,0 +1,88 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="flex row wrap justify-between align-start gy-3">
+    <!-- Start year -->
+    <div class="w-4 flex row nowrap gap-1 year-row">
+        <div class="year">
+            <mat-form-field appearance="outline">
+                <mat-label>Start Year</mat-label>
+                <input
+                    matInput
+                    type="number"
+                    formControlName="start_year"
+                />
+                <mat-error>
+                    @if (form.get('start_year')?.hasError('required')) {
+                        {{ ffError.msg('required') }}
+                    } @else if (form.get('start_year')?.hasError('min')) {
+                        Year {{ ffError.msg('min') }} 0
+                    }
+                </mat-error>
+
+            </mat-form-field>
+        </div>
+        <div class="era">
+            <mat-form-field appearance="outline">
+                <mat-select formControlName="start_era">
+                    @for (era of eras; track era) {
+                        <mat-option [value]="era">
+                            {{ era }}
+                        </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <!-- End year -->
+    <div class="w-4 flex row nowrap gap-1 year-row">
+        <div class="year">
+            <mat-form-field appearance="outline">
+                <mat-label>End Year</mat-label>
+                <input
+                    matInput
+                    type="number"
+                    formControlName="end_year"
+                />
+                <mat-error>
+                    @if (form.get('end_year')?.hasError('required')) {
+                        {{ ffError.msg('required') }}
+                    } @else if (form.get('end_year')?.hasError('min')) {
+                        Year {{ ffError.msg('min') }} 0
+                    } @else if (form.get('end_year')?.hasError('invalidChronologyRange')) {
+                        End Year must be after or equal to start year
+                    }
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="era">
+            <mat-form-field appearance="outline">
+                <mat-select formControlName="end_era">
+                    @for (era of eras; track era) {
+                        <mat-option [value]="era">
+                            {{ era }}
+                        </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <!-- Object ID (optional) -->
+    <div class="w-2">
+        <mat-form-field appearance="outline">
+            <mat-label>Object ID</mat-label>
+            <input matInput formControlName="object_id"/>
+        </mat-form-field>
+    </div>
+
+    <!-- Submit -->
+    <div class="w-2">
+        <button
+            matButton="filled"
+            type="submit"
+            [disabled]="form.invalid"
+            class="w-100"
+        >
+            Submit
+        </button>
+    </div>
+</form>

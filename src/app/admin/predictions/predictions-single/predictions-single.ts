@@ -24,6 +24,7 @@ import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialog
 import {Alert} from '../../../core/services/alert';
 import {FeedbackConnectForm} from '../../../reusable/feedback-connect-form/feedback-connect-form';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {FeedbackCreateForm} from '../../../reusable/feedback-create-form/feedback-create-form';
 
 @Component({
   selector: 'app-predictions-single',
@@ -47,7 +48,8 @@ import {MatTab, MatTabGroup} from '@angular/material/tabs';
         MatDialogClose,
         FeedbackConnectForm,
         MatTabGroup,
-        MatTab
+        MatTab,
+        FeedbackCreateForm
     ],
   templateUrl: './predictions-single.html',
   styleUrl: './predictions-single.scss',

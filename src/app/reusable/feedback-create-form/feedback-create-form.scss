@@ -1,0 +1,11 @@
+.year-row {
+    --era-width: 75px;
+
+    .year {
+        width: calc(100% - var(--era-width));
+    }
+
+    .era {
+        width: var(--era-width);
+    }
+}

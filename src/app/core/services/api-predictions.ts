@@ -13,6 +13,7 @@ import {map, Observable} from 'rxjs';
 import {PaginatedResponse} from '../models/paginated-response';
 import {RequestParams} from '../models/request-params';
 import {cleanParams} from '../utils/helpers';
+import {PotteryItemCreateFromPredictionRequest} from '../models/pottery-item';
 
 @Injectable({
     providedIn: 'root',
@@ -101,6 +102,16 @@ export class ApiPredictions {
         return this.http.post<Prediction>(
             `${this.url}/${predictionId}/feedback/connect`,
             {pottery_item_id: potteryItemId}
+        );
+    }
+
+    giveFeedbackCreate(
+        predictionId: number,
+        payload: PotteryItemCreateFromPredictionRequest
+    ): Observable<Prediction> {
+        return this.http.post<Prediction>(
+            `${this.url}/${predictionId}/feedback/create`,
+            payload,
         );
     }
 

@@ -199,6 +199,19 @@
             } @else {
                 <div class="card px-4 py-2">
                     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+                        <mat-tab label="Create New Pottery Item">
+                            <div class="py-4 flex column gap-3">
+                                <p>
+                                    Submit the true chronology for this prediction's input data to validate it and
+                                    create a new pottery item in the pottery dataset.
+                                </p>
+                                <app-feedback-create-form
+                                    [predictionId]="prediction.id"
+                                    (created)="reloadPrediction()"
+                                >
+                                </app-feedback-create-form>
+                            </div>
+                        </mat-tab>
                         <mat-tab label="Connect to Existing Pottery Item">
                             <div class="py-4 flex column gap-3">
                                 <p>
@@ -212,13 +225,6 @@
                                 </app-feedback-connect-form>
                             </div>
 
-                        </mat-tab>
-                        <mat-tab label="Create New Pottery Item">
-                            <div class="py-4 flex column gap-2">
-                            <p>
-                                Submit the true chronology for this prediction's input data to create a new pottery item in the pottery dataset.
-                            </p>
-                            </div>
                         </mat-tab>
                     </mat-tab-group>
                 </div>

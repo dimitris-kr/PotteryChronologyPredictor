@@ -16,6 +16,10 @@ export function formatYear(year: number): string {
     else return `${yearAbs}`;
 }
 
+export function toSignedYear(year: number, era: 'BC' | 'AD'): number {
+    return era === 'BC' ? -Math.abs(year) : Math.abs(year);
+}
+
 export function cleanParams<T extends Record<string, any>>(obj: T): { [p: string]: any } {
     return Object.fromEntries(
         Object.entries(obj).filter(
