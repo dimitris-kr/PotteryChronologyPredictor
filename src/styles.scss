@@ -473,3 +473,22 @@ table {
         width: 15px;
     }
 }
+
+// IMAGE IN TABLE
+
+table .image-container {
+    width: 50px;
+    aspect-ratio: 1;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background-color: var(--black-05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}

@@ -1,5 +1,7 @@
 import {isClassification, Prediction, PredictionMatch, PredictionStatus} from '../models/prediction';
 import {HISTORICAL_PERIOD_COLORS} from '../models/historical-period';
+import {PotteryItem} from '../models/pottery-item';
+import {RequestParams} from '../models/request-params';
 
 export function shorten(text: string, maxWords: number = 10): string {
     let words = text.split(" ");
@@ -60,7 +62,7 @@ export const statusClassMap: Record<PredictionStatus, string> = {
     pending: 'warning',
 };
 
-export function getStatusClass(p: Prediction):string {
+export function getStatusClass(p: Prediction): string {
     return statusClassMap[p.status];
 }
 
@@ -73,4 +75,12 @@ export const matchClassMap: Record<PredictionMatch, string> = {
 
 export function getMatchClass(p: Prediction): string {
     return matchClassMap[p.match]
+}
+
+export function getTrainDataClass(pi: PotteryItem): string {
+    return pi.in_train_set ? 'primary' : 'disabled';
+}
+
+export function trainDataExplanation(pi: PotteryItem): string {
+    return pi.in_train_set ? 'Item is included in the models\' training set' : 'Item is NOT yet included in the models\' training set';
 }

@@ -12,4 +12,6 @@ export const HISTORICAL_PERIOD_COLORS: Record<string, string> = {
     Hellenistic: '#937EB7'
 }
 
-
+export interface HistoricalPeriodFilters {
+    'non_empty'?: boolean;
+}

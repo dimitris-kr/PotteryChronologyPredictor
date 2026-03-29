@@ -9,6 +9,7 @@ import {authReverseGuard} from './core/guards/auth-reverse-guard';
 import {PredictionsAll} from './admin/predictions/predictions-all/predictions-all';
 import {PredictionsNew} from './admin/predictions/predictions-new/predictions-new';
 import {PredictionsSingle} from './admin/predictions/predictions-single/predictions-single';
+import {PotteryItems} from './admin/pottery-items/pottery-items/pottery-items';
 
 export const routes: Routes = [
     /* Public layout */
@@ -52,6 +53,15 @@ export const routes: Routes = [
             {
                 path: 'about',
                 component: About,
+            },
+            {
+                path: 'data',
+                children: [
+                    {
+                        path: '',
+                        component: PotteryItems
+                    }
+                ]
             },
             {
                 path: 'predictions',

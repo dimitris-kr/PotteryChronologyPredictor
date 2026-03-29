@@ -80,8 +80,9 @@ export class PredictionsAll implements OnInit {
     ];
 
     dataSource = new MatTableDataSource<Prediction>([]);
-
     total = 0;
+
+    imageUrls = new Map<number, string>();
 
     params: RequestParams<PredictionSortBy, PredictionFilters> = {
         page: {
@@ -141,7 +142,6 @@ export class PredictionsAll implements OnInit {
             });
     }
 
-    imageUrls = new Map<number, string>();
 
     loadImages(items: Prediction[]) {
         const requests = items
@@ -189,16 +189,14 @@ export class PredictionsAll implements OnInit {
         return values.input_type || values.output_type || values.status || values.match;
     }
 
-
-    protected readonly shorten = shorten;
-    protected readonly formatYear = formatYear;
-
     ngOnDestroy() {
         for (const url of this.imageUrls.values()) {
             URL.revokeObjectURL(url);
         }
     }
 
+    protected readonly shorten = shorten;
+    protected readonly formatYear = formatYear;
     protected readonly matchExplanation = matchExplanation;
     protected readonly getMatchClass = getMatchClass;
 }

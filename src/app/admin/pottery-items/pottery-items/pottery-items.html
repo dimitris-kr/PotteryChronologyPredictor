@@ -1,0 +1,283 @@
+<div class="inner">
+    <div class="px-4">
+        <h1>Pottery Data</h1>
+        <p>Here you can find all pottery items available, either retrieved from direct uploads on the app for making
+            predictions or preloaded on the app as part of the training dataset of the models.</p>
+    </div>
+
+    <div class="card">
+        <mat-expansion-panel>
+            <mat-expansion-panel-header>
+                <mat-panel-title><h6 class="m-0">Filters @if (activeFilters()) {
+                    *
+                }</h6></mat-panel-title>
+            </mat-expansion-panel-header>
+            <form [formGroup]="filtersForm" class="flex row wrap justify-between gy-1">
+
+                <div class="w-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Historical Period</mat-label>
+                        <mat-select formControlName="historical_period_id">
+                            <mat-option [value]="undefined">All</mat-option>
+                            @for (period of historicalPeriods$ | async; track period.id) {
+                                <mat-option [value]="period.id">
+                                    {{ period.name }} <!--({{ formatYear(period.limit_lower) }}
+                                    - {{ formatYear(period.limit_upper) }})-->
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="w-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>In Models' Training Set</mat-label>
+                        <mat-select formControlName="in_train_set">
+                            <mat-option [value]="undefined">All</mat-option>
+                            <mat-option [value]="true">Yes</mat-option>
+                            <mat-option [value]="false">No</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                <div class="w-3">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Data Source</mat-label>
+                        <mat-select formControlName="data_source_id">
+                            <mat-option [value]="undefined">All</mat-option>
+                            @for (source of dataSources$ | async; track source.id) {
+                                <mat-option [value]="source.id">
+                                    {{ source.description }}
+                                </mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+
+                @if (activeFilters()) {
+                    <div class="w-100">
+                        <button mat-button type="button" (click)="clearFilters()">
+                            Clear filters
+                        </button>
+                    </div>
+                }
+            </form>
+        </mat-expansion-panel>
+    </div>
+
+    <div class="card flex column gap-4 p-4 pottery-items">
+        <table
+            mat-table
+            [dataSource]="dataSource"
+            matSort
+            matSortDisableClear
+            (matSortChange)="onSortChange($event)"
+            matSortActive="created_at"
+            matSortDirection="desc"
+        >
+            <!-- ID -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header="id"
+                >
+                    #
+                </th>
+                <td mat-cell
+                    *matCellDef="let pi"
+                >
+                    {{ pi.id }}
+                </td>
+            </ng-container>
+
+            <!-- Image -->
+            <ng-container matColumnDef="image">
+                <th mat-header-cell
+                    *matHeaderCellDef
+                >
+                    Image
+                </th>
+                <td mat-cell
+                    *matCellDef="let pi"
+                >
+                    <div class="image-container">
+                        @if (pi.image_path) {
+                            @if (imageUrls.get(pi.id)) {
+                                <img
+                                    [src]="imageUrls.get(pi.id)"
+                                    loading="lazy"
+                                    alt="Pottery Image"
+                                >
+                            } @else {
+                                <mat-spinner diameter="25"></mat-spinner>
+                            }
+                        }
+                    </div>
+                </td>
+            </ng-container>
+
+            <!-- Object ID -->
+            <ng-container matColumnDef="objectId">
+                <th mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header="object_id"
+                >
+                    Object ID
+                </th>
+                <td mat-cell
+                    *matCellDef="let pi"
+                >
+                    @if (pi.object_id) {
+                        {{ pi.object_id }}
+                    } @else {
+                        -
+                    }
+                </td>
+            </ng-container>
+
+            <!-- Description -->
+            <ng-container matColumnDef="description">
+                <th mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header="description"
+                >
+                    Description
+                </th>
+                <td mat-cell
+                    *matCellDef="let pi"
+                >
+                    @if (pi.description) {
+                        {{ shorten(pi.description) }} ...
+                    } @else {
+                        -
+                    }
+                </td>
+            </ng-container>
+
+            <!-- Historical Period -->
+            <ng-container matColumnDef="historicalPeriod">
+                <th mat-header-cell
+                    *matHeaderCellDef
+                >
+                    Historical Period
+                </th>
+                <td mat-cell
+                    *matCellDef="let pi"
+                >
+                    @if (pi.chronology_label) {
+                        {{ pi.chronology_label.historical_period.name }}
+                    }
+                </td>
+            </ng-container>
+
+            <!-- Start Year -->
+            <ng-container matColumnDef="startYear">
+                <th mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header="start_year"
+                >
+                    Start Year
+                </th>
+                <td mat-cell
+                    *matCellDef="let pi"
+                >
+                    @if (pi.chronology_label) {
+                        {{ formatYear(pi.chronology_label.start_year) }}
+                    }
+                </td>
+            </ng-container>
+
+            <!-- End Year -->
+            <ng-container matColumnDef="endYear">
+                <th mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header="end_year"
+                >
+                    End Year
+                </th>
+                <td mat-cell
+                    *matCellDef="let pi"
+                >
+                    @if (pi.chronology_label) {
+                        {{ formatYear(pi.chronology_label.end_year) }}
+                    }
+                </td>
+            </ng-container>
+
+            <!-- Train Data -->
+            <ng-container matColumnDef="trainData">
+                <th mat-header-cell
+                    *matHeaderCellDef
+                >
+                    Train Data
+                </th>
+                <td mat-cell
+                    *matCellDef="let pi"
+                >
+                    <div class="badge"
+                         [ngClass]="getTrainDataClass(pi)"
+                         [matTooltip]="trainDataExplanation(pi)"
+                         matTooltipPosition="above"
+                    >
+                        {{ pi.in_train_set ? 'Yes' : 'No' }}
+                    </div>
+
+                </td>
+            </ng-container>
+
+            <!-- Data Source -->
+            <ng-container matColumnDef="source">
+                <th mat-header-cell
+                    *matHeaderCellDef
+                >
+                    Source
+                </th>
+                <td mat-cell
+                    *matCellDef="let pi"
+                >
+                    {{ pi.data_source.description }}
+                </td>
+            </ng-container>
+
+            <!-- Created -->
+            <ng-container matColumnDef="createdAt">
+                <th mat-header-cell
+                    *matHeaderCellDef
+                    mat-sort-header="created_at"
+                >
+                    Created
+                </th>
+                <td mat-cell
+                    *matCellDef="let pi"
+                >
+                    {{ pi.created_at | date:'medium' }}
+                </td>
+            </ng-container>
+
+            <!-- Actions -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell
+                    *matHeaderCellDef>
+                </th>
+                <td mat-cell
+                    *matCellDef="let pi"
+                >
+                    <button mat-icon-button [routerLink]="['/admin/data', pi.id]" matTooltip="View Details"
+                            matTooltipPosition="above">
+                        <mat-icon>open_in_new</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <mat-paginator
+            [length]="total"
+            [pageSize]="params.page.limit"
+            [pageSizeOptions]="[25, 50, 75, 100]"
+            (page)="loadPage($event)">
+        </mat-paginator>
+    </div>
+</div>
