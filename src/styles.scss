@@ -492,3 +492,9 @@ table .image-container {
         object-fit: cover;
     }
 }
+
+// Slider
+html {
+    --mat-slider-label-label-text-size: 9px;
+    --mat-slider-label-label-text-line-height: 1em;
+}

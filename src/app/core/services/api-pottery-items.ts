@@ -2,7 +2,13 @@ import {Injectable} from '@angular/core';
 import {getApiUrl} from '../utils/request';
 import {HttpClient} from '@angular/common/http';
 import {map, Observable} from 'rxjs';
-import {PotteryItem, PotteryItemBase, PotteryItemFilters, PotteryItemSortBy} from '../models/pottery-item';
+import {
+    PotteryItem,
+    PotteryItemBase,
+    PotteryItemFilters,
+    PotteryItemSortBy,
+    PotteryItemYearRange
+} from '../models/pottery-item';
 import {parseBackendDate} from '../utils/dates';
 import {RequestParams} from '../models/request-params';
 import {PaginatedResponse} from '../models/paginated-response';
@@ -20,6 +26,7 @@ export class ApiPotteryItems {
     getAll(
         params: RequestParams<PotteryItemSortBy, PotteryItemFilters>
     ): Observable<PaginatedResponse<PotteryItem>> {
+        console.log(params);
         return this.http
             .get<any>(this.url, {params: {...params.page, ...params.sort, ...cleanParams(params.filters)}})
             .pipe(
@@ -42,6 +49,10 @@ export class ApiPotteryItems {
         return this.http.get<PotteryItemBase[]>(`${this.url}/search`, {
             params: { q: query }
         })
+    }
+
+    getPotteryItemYearRange(): Observable<PotteryItemYearRange> {
+        return this.http.get<PotteryItemYearRange>(`${this.url}/year-range`);
     }
 
     private normalize(raw: any): PotteryItem {

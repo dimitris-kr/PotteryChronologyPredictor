@@ -34,3 +34,8 @@ export interface PotteryItemFilters {
     data_source_id?: number;
     in_train_set?: boolean;
 }
+
+export interface PotteryItemYearRange {
+    min_start_year?: number;
+    max_end_year?: number;
+}

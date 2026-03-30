@@ -9,7 +9,12 @@ import {
     MatTableDataSource
 } from '@angular/material/table';
 import {RequestParams, SortOrder} from '../../../core/models/request-params';
-import {PotteryItem, PotteryItemFilters, PotteryItemSortBy} from '../../../core/models/pottery-item';
+import {
+    PotteryItem,
+    PotteryItemFilters,
+    PotteryItemSortBy,
+    PotteryItemYearRange
+} from '../../../core/models/pottery-item';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {ApiPotteryItems} from '../../../core/services/api-pottery-items';
 import {ApiImages} from '../../../core/services/api-images';
@@ -25,7 +30,7 @@ import {
     trainDataExplanation
 } from '../../../core/utils/helpers';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {AsyncPipe, DatePipe, NgClass} from '@angular/common';
+import {AsyncPipe, DatePipe, JsonPipe, NgClass} from '@angular/common';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
@@ -37,10 +42,11 @@ import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {DataSource, DataSourceFilters} from '../../../core/models/data-source';
 import {ApiDataSources} from '../../../core/services/api-data-sources';
+import {MatSlider, MatSliderRangeThumb} from '@angular/material/slider';
 
 
 @Component({
-  selector: 'app-pottery-items',
+    selector: 'app-pottery-items',
     imports: [
         MatSort,
         MatTable,
@@ -71,10 +77,12 @@ import {ApiDataSources} from '../../../core/services/api-data-sources';
         MatLabel,
         MatSelect,
         MatOption,
-        AsyncPipe
+        AsyncPipe,
+        MatSlider,
+        MatSliderRangeThumb
     ],
-  templateUrl: './pottery-items.html',
-  styleUrl: './pottery-items.scss',
+    templateUrl: './pottery-items.html',
+    styleUrl: './pottery-items.scss',
 })
 export class PotteryItems implements OnInit {
 
@@ -115,6 +123,7 @@ export class PotteryItems implements OnInit {
 
     historicalPeriods$!: Observable<HistoricalPeriod[]>;
     dataSources$!: Observable<DataSource[]>;
+    yearRange!: PotteryItemYearRange;
 
     constructor(
         private potteryItemsApi: ApiPotteryItems,
@@ -137,6 +146,7 @@ export class PotteryItems implements OnInit {
         this.loadPage();
         this.loadHistoricalPeriods();
         this.loadDataSources();
+        this.loadYearRange();
 
         this.filtersForm.valueChanges
             .pipe(debounceTime(300))
@@ -195,6 +205,20 @@ export class PotteryItems implements OnInit {
         this.dataSources$ = this.dataSourcesApi.getAllNoPag(filters);
     }
 
+    loadYearRange() {
+        this.potteryItemsApi.getPotteryItemYearRange().subscribe(yearRange => {
+            this.yearRange = yearRange;
+            this.resetYearRange();
+        });
+    }
+
+    resetYearRange() {
+        this.filtersForm.patchValue({
+            start_year: this.yearRange.min_start_year,
+            end_year: this.yearRange.max_end_year,
+        });
+    }
+
     resetPagination(): void {
         this.params.page.offset = 0;
         this.paginator.pageIndex = 0;
@@ -212,16 +236,29 @@ export class PotteryItems implements OnInit {
     clearFilters(): void {
         this.filtersForm.reset({
             historical_period_id: undefined,
-            start_year: undefined,
-            end_year: undefined,
+            start_year: this.yearRange.min_start_year,
+            end_year: this.yearRange.max_end_year,
             data_source_id: undefined,
             in_train_set: undefined,
         });
     }
 
+    activeFilterYearRange(): boolean {
+        const values = this.filtersForm.value;
+        return (
+            values.start_year != this.yearRange.min_start_year ||
+            values.end_year != this.yearRange.max_end_year
+        );
+    }
+
     activeFilters(): boolean {
         const values = this.filtersForm.value;
-        return values.historical_period_id || values.start_year || values.end_year || values.data_source_id || values.in_train_set;
+        return (
+            values.historical_period_id ||
+            values.data_source_id ||
+            values.in_train_set ||
+            this.activeFilterYearRange()
+        );
     }
 
     ngOnDestroy() {

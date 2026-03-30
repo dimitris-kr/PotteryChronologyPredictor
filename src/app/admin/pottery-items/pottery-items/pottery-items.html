@@ -30,8 +30,39 @@
                 </div>
 
                 <div class="w-3">
+                    <mat-label>
+                        Year Range
+                        @if (activeFilterYearRange()) {
+                            : <small>
+                                {{ formatYear(filtersForm.value.start_year) }}
+                                - {{ formatYear(filtersForm.value.end_year) }}
+                            </small>
+                        }
+                    </mat-label>
+                    <mat-slider
+                        [min]="yearRange.min_start_year"
+                        [max]="yearRange.max_end_year"
+                        [step]="1"
+                        [discrete]="true"
+                        [displayWith]="formatYear"
+                        class="w-100"
+                    >
+                        <input
+                            matSliderStartThumb
+                            formControlName="start_year"
+                        />
+                        <input
+                            matSliderEndThumb
+                            formControlName="end_year"
+                        />
+                    </mat-slider>
+
+
+                </div>
+
+                <div class="w-3">
                     <mat-form-field appearance="outline">
-                        <mat-label>In Models' Training Set</mat-label>
+                        <mat-label>In Training Set</mat-label>
                         <mat-select formControlName="in_train_set">
                             <mat-option [value]="undefined">All</mat-option>
                             <mat-option [value]="true">Yes</mat-option>
