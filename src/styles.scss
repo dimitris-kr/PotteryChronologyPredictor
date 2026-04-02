@@ -474,7 +474,7 @@ table {
     }
 }
 
-// IMAGE IN TABLE
+// IMAGE CONTAINERS
 
 table .image-container {
     width: 50px;
@@ -492,6 +492,23 @@ table .image-container {
         object-fit: cover;
     }
 }
+
+.data-card {
+    .image-container {
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        background-color: var(--black-05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 60px;
+    }
+
+    img {
+        border-radius: var(--radius-md);
+    }
+}
+
 
 // Slider
 html {

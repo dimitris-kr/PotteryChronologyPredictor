@@ -6,10 +6,10 @@ export interface HistoricalPeriod {
 }
 
 export const HISTORICAL_PERIOD_COLORS: Record<string, string> = {
-    Orientalizing: '#BF6D91',
-    Archaic: '#416788',
-    Classical: '#899679',
-    Hellenistic: '#937EB7'
+    orientalizing: '#BF6D91',
+    archaic: '#416788',
+    classical: '#899679',
+    hellenistic: '#937EB7'
 }
 
 export interface HistoricalPeriodFilters {

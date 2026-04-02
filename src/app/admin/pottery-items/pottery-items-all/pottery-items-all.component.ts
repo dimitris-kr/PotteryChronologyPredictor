@@ -46,7 +46,7 @@ import {MatSlider, MatSliderRangeThumb} from '@angular/material/slider';
 
 
 @Component({
-    selector: 'app-pottery-items',
+    selector: 'app-pottery-items-all',
     imports: [
         MatSort,
         MatTable,
@@ -81,10 +81,10 @@ import {MatSlider, MatSliderRangeThumb} from '@angular/material/slider';
         MatSlider,
         MatSliderRangeThumb
     ],
-    templateUrl: './pottery-items.html',
-    styleUrl: './pottery-items.scss',
+    templateUrl: './pottery-items-all.component.html',
+    styleUrl: './pottery-items-all.component.scss',
 })
-export class PotteryItems implements OnInit {
+export class PotteryItemsAll implements OnInit {
 
     displayedColumns: string[] = [
         'id',

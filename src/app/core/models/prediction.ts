@@ -85,4 +85,5 @@ export interface PredictionFilters {
     output_type?: PredictionOutputType;
     status?: PredictionStatus;
     match?: PredictionMatch;
+    pottery_item_id?: number;
 }

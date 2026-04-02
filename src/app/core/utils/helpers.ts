@@ -52,9 +52,44 @@ export function matchExplanation(prediction: Prediction): string {
     return "No verified chronology is available, the prediction cannot be evaluated.";
 }
 
+function hashString(str: string): number {
+    let hash = 0;
+
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+        hash |= 0; // force 32bit
+    }
+
+    return Math.abs(hash);
+}
+
+function generateColor(str: string): string {
+    const hash = hashString(str);
+
+    const hue = hash % 360;
+
+    const saturation = 30 + (hash % 10);
+    const lightness = 50 + (hash % 10);
+
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+}
+
+const generatedCache: Record<string, string> = {};
+
 export function getColor(period?: string) {
     if (!period) return null;
-    return HISTORICAL_PERIOD_COLORS[period];
+
+    const key = period.toLowerCase();
+
+    if (HISTORICAL_PERIOD_COLORS[key]) {
+        return HISTORICAL_PERIOD_COLORS[key];
+    }
+
+    if (!generatedCache[key]) {
+        generatedCache[key] = generateColor(key);
+    }
+
+    return generatedCache[key];
 }
 
 export const statusClassMap: Record<PredictionStatus, string> = {

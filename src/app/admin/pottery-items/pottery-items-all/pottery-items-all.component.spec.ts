@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PotteryItems } from './pottery-items';
+import { PotteryItemsAll } from './pottery-items-all.component';
 
 describe('PotteryItems', () => {
-  let component: PotteryItems;
-  let fixture: ComponentFixture<PotteryItems>;
+  let component: PotteryItemsAll;
+  let fixture: ComponentFixture<PotteryItemsAll>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PotteryItems]
+      imports: [PotteryItemsAll]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PotteryItems);
+    fixture = TestBed.createComponent(PotteryItemsAll);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

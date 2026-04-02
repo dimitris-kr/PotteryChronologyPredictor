@@ -9,7 +9,8 @@ import {authReverseGuard} from './core/guards/auth-reverse-guard';
 import {PredictionsAll} from './admin/predictions/predictions-all/predictions-all';
 import {PredictionsNew} from './admin/predictions/predictions-new/predictions-new';
 import {PredictionsSingle} from './admin/predictions/predictions-single/predictions-single';
-import {PotteryItems} from './admin/pottery-items/pottery-items/pottery-items';
+import {PotteryItemsAll} from './admin/pottery-items/pottery-items-all/pottery-items-all.component';
+import {PotteryItemsSingle} from './admin/pottery-items/pottery-items-single/pottery-items-single';
 
 export const routes: Routes = [
     /* Public layout */
@@ -59,7 +60,11 @@ export const routes: Routes = [
                 children: [
                     {
                         path: '',
-                        component: PotteryItems
+                        component: PotteryItemsAll
+                    },
+                    {
+                        path: ':id',
+                        component: PotteryItemsSingle
                     }
                 ]
             },

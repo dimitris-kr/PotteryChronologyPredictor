@@ -1,0 +1,116 @@
+<div class="inner">
+    <div class="px-4 flex column gap-3">
+        <div class="flex row wrap justify-between align-center">
+            <h1 class="m-0">Pottery Data</h1>
+            <button mat-icon-button routerLink="/admin/data" matTooltip="Back to All Pottery Data"
+                    matTooltipPosition="above">
+                <mat-icon>close_fullscreen</mat-icon>
+            </button>
+        </div>
+        @if (potteryItem) {
+            <div class="flex column gap-2">
+                <h3 class="m-0">Pottery Item #{{ potteryItem.id }}</h3>
+                <div class="meta flex row wrap gap-3">
+                    <div>
+                        Created: <strong>{{ potteryItem.created_at | date:'medium' }}</strong>
+                    </div>
+                    <div>
+                        Source <strong>{{ potteryItem.data_source.description }}</strong>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (potteryItem) {
+        <div class="flex row wrap justify-between align-stretch gy-4">
+            <div class="w-100 flex align-stretch">
+                <div class="card p-4 flex column justify-center data-card">
+                    <div class="badge primary card-title">
+                        Data
+                    </div>
+                    <div class="flex row wrap justify-between align-stretch gy-3">
+                        <div class="w-7 flex column gap-5">
+                            <div>
+                                <h5>Object ID</h5>
+                                <p>@if (potteryItem.object_id) {
+                                    {{ potteryItem.object_id }}
+                                } @else {
+                                    -
+                                }
+                                </p>
+                            </div>
+                            <div>
+                                <h5>Description</h5>
+                                <p>@if (potteryItem.description) {
+                                    {{ potteryItem.description }}
+                                } @else {
+                                    -
+                                }
+                                </p>
+                            </div>
+
+                        </div>
+                        <div class="w-5">
+                            <h5>Image</h5>
+                            @if (potteryItem.image_path) {
+                                <div class="image-container">
+                                    @if (imageUrl) {
+                                        <img
+                                            [src]="imageUrl"
+                                            loading="lazy"
+                                            alt="Pottery Image"
+                                        >
+                                    } @else {
+                                        <mat-spinner diameter="25"></mat-spinner>
+                                    }
+                                </div>
+                            } @else {
+                                -
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (potteryItem.chronology_label) {
+            <div class="flex column gap-4">
+                <div class="px-4">
+                    <h3>Chronology</h3>
+                </div>
+
+                <div class="flex row wrap justify-between align-stretch gy-4">
+                    <div class="w-6 flex align-stretch">
+                        <div class="card w-100 p-4 flex column justify-center">
+                            <div class="badge primary card-title">
+                                True Historical Period
+                            </div>
+                            <div class="flex row nowrap justify-start align-center gap-2">
+                                <div class="indicator"
+                                     [ngStyle]="{'background-color': getColor(potteryItem.chronology_label.historical_period.name)}"></div>
+                                <div
+                                    class="display m-0">{{ potteryItem.chronology_label.historical_period.name }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-6 flex align-stretch">
+                        <div class="card w-100 p-4 flex column justify-center">
+                            <div class="badge primary card-title">
+                                True Year Range
+                            </div>
+
+                            <div
+                                class="display m-0">{{ formatYear(potteryItem.chronology_label.start_year) }}
+                                – {{ formatYear(potteryItem.chronology_label.end_year) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+    }
+</div>
