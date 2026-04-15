@@ -366,7 +366,7 @@
                                 <th>Input</th>
                                 <td>
                                     @for (ft of prediction.model_version.model.feature_sets; track ft.id; let idx = $index) {
-                                        {{ ft.data_type }}
+                                        {{ capitalize(ft.data_type) }}
                                         @if (idx < prediction.model_version.model.feature_sets.length - 1) {
                                             &
                                         }
@@ -377,7 +377,7 @@
                                 <th>Output</th>
                                 <td>
                                     @for (t of prediction.model_version.model.targets; track t.id; let idx = $index) {
-                                        {{ t.name }}
+                                        {{ capitalize(t.name) }}
                                         @if (idx < prediction.model_version.model.targets.length - 1) {
                                             &
                                         }

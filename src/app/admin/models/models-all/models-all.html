@@ -1,0 +1,117 @@
+<div class="inner">
+    <div class="px-4">
+        <h1>Predictive Models</h1>
+        <p>Here you can view and manage the neural network models responsible for producing pottery chronology
+            predictions.</p>
+    </div>
+
+    @for (table of modelsTables; track table.task.id) {
+        <div class="flex column gap-3">
+            <div class="px-4 flex row gap-2 justify-start align-center">
+                <h3 class="m-0">{{ capitalize(table.task.name) }} Models</h3>
+                @if (taskExplanation(table.task.name)) {
+                    <button
+                        matIconButton
+                        aria-label="help"
+                        [matTooltip]="taskExplanation(table.task.name)"
+                        matTooltipPosition="after"
+                    >
+                        <mat-icon>help</mat-icon>
+                    </button>
+                }
+            </div>
+
+            <div class="card flex column gap-4 p-4 models">
+                <table
+                    mat-table
+                    [dataSource]="table.dataSource"
+                    matSort
+                    matSortDisableClear
+                    (matSortChange)="onSortChange(table, $event)"
+                    matSortActive="model_id"
+                    matSortDirection="asc"
+                >
+                    <!-- Model -->
+                    <ng-container matColumnDef="model">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="model_id">Model</th>
+                        <td mat-cell *matCellDef="let m">
+                            {{ m.model.name }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Version -->
+                    <ng-container matColumnDef="version">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="version">Version</th>
+                        <td mat-cell *matCellDef="let m">
+                            {{ m.version }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Input Type -->
+                    <ng-container matColumnDef="inputType">
+                        <th mat-header-cell *matHeaderCellDef>Input Type</th>
+                        <td mat-cell *matCellDef="let m">
+                            @for (ft of m.model.feature_sets; track ft.id; let idx = $index) {
+                                {{ capitalize(ft.data_type) }}
+                                @if (idx < m.model.feature_sets.length - 1) {
+                                    &
+                                }
+                            }
+                        </td>
+                    </ng-container>
+
+                    <!-- Output Type -->
+                    <ng-container matColumnDef="outputType">
+                        <th mat-header-cell *matHeaderCellDef>Output Type</th>
+                        <td mat-cell *matCellDef="let m">
+                            @for (t of m.model.targets; track t.id; let idx = $index) {
+                                {{ capitalize(t.name) }}
+                                @if (idx < m.model.targets.length - 1) {
+                                    &
+                                }
+                            }
+                        </td>
+                    </ng-container>
+
+                    <!-- Score -->
+                    <ng-container matColumnDef="score">
+                        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="scoreColumn(table.task.name)">{{scoreColumnLabel(table.task.name)}}</th>
+                        <td mat-cell *matCellDef="let m">
+                            @switch (table.task.name.toLowerCase()) {
+                                @case ("classification") {
+                                    {{ m.val_accuracy | percent:'1.0-2' }}
+                                }
+                                @case ("regression") {
+                                    ±{{ m.val_mae | number: '1.0-0' }} years
+                                }
+                                @default {
+                                }
+                            }
+                        </td>
+                    </ng-container>
+
+                    <!-- Last Trained -->
+                    <ng-container matColumnDef="lastTrained">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header="created_at">Last Trained</th>
+                        <td mat-cell *matCellDef="let m">
+                            {{ m.created_at | date:'medium' }}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="table.displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: table.displayedColumns"></tr>
+                </table>
+
+                <mat-paginator
+                    [length]="table.total"
+                    [pageSize]="table.params.page.limit"
+                    [pageSizeOptions]="[25]"
+                    (page)="loadPage(table, $event)">
+                </mat-paginator>
+            </div>
+
+        </div>
+    }
+
+
+</div>

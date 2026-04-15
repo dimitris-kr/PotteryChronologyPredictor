@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {getApiUrl} from '../utils/request';
 import {HttpClient} from '@angular/common/http';
 import {PageState} from '../models/request-params';
-import {HistoricalPeriod, HistoricalPeriodFilters} from '../models/historical-period';
 import {Observable} from 'rxjs';
 import {PaginatedResponse} from '../models/paginated-response';
 import {cleanParams} from '../utils/helpers';

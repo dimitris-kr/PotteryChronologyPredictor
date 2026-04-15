@@ -52,6 +52,39 @@ export function matchExplanation(prediction: Prediction): string {
     return "No verified chronology is available, the prediction cannot be evaluated.";
 }
 
+export function taskExplanation(task: string): string | null {
+    switch (task.toLowerCase()) {
+        case "classification":
+            return "These models predict historical periods.";
+        case "regression":
+            return "These models predict exact years.";
+        default:
+            return null;
+    }
+}
+
+export function scoreColumn(task: string): string {
+    switch (task.toLowerCase()) {
+        case "classification":
+            return "val_accuracy"
+        case "regression":
+            return "val_mae";
+        default:
+            return "";
+    }
+}
+
+export function scoreColumnLabel(task: string): string {
+    switch (task.toLowerCase()) {
+        case "classification":
+            return "Accuracy"
+        case "regression":
+            return "Avg. Difference";
+        default:
+            return "";
+    }
+}
+
 function hashString(str: string): number {
     let hash = 0;
 
@@ -118,4 +151,11 @@ export function getTrainDataClass(pi: PotteryItem): string {
 
 export function trainDataExplanation(pi: PotteryItem): string {
     return pi.in_train_set ? 'Item is included in the models\' training set' : 'Item is NOT yet included in the models\' training set';
+}
+
+export function capitalize(str: string): string {
+    return str.replace(
+        /\w\S*/g,
+        text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+    );
 }

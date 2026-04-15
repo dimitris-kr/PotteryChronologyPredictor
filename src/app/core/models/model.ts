@@ -31,6 +31,17 @@ export interface ModelVersion {
     val_loss: number | null;
     val_accuracy: number | null;
     val_mae: number | null;
+    is_current: boolean;
     created_at: Date;
     model: Model;
+}
+
+export type ModelVersionSortBy = 'model_id' | 'created_at' | 'version' | 'train_sample_size' | 'val_accuracy' | 'val_mae';
+
+export interface ModelFilters {
+    task_id: number;
+}
+
+export interface ModelVersionFilters {
+    model_id: number;
 }

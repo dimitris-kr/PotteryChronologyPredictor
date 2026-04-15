@@ -11,6 +11,8 @@ import {PredictionsNew} from './admin/predictions/predictions-new/predictions-ne
 import {PredictionsSingle} from './admin/predictions/predictions-single/predictions-single';
 import {PotteryItemsAll} from './admin/pottery-items/pottery-items-all/pottery-items-all.component';
 import {PotteryItemsSingle} from './admin/pottery-items/pottery-items-single/pottery-items-single';
+import {ModelsAll} from './admin/models/models-all/models-all';
+import {ModelsSingle} from './admin/models/models-single/models-single';
 
 export const routes: Routes = [
     /* Public layout */
@@ -65,6 +67,19 @@ export const routes: Routes = [
                     {
                         path: ':id',
                         component: PotteryItemsSingle
+                    }
+                ]
+            },
+            {
+                path: 'models',
+                children: [
+                    {
+                        path: '',
+                        component: ModelsAll
+                    },
+                    {
+                        path: ':id',
+                        component: ModelsSingle
                     }
                 ]
             },

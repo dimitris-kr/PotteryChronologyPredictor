@@ -8,6 +8,7 @@ import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatTooltip} from '@angular/material/tooltip';
 import {
+    capitalize,
     formatYear,
     getColor,
     getMatchClass,
@@ -142,4 +143,5 @@ export class PredictionsSingle {
     protected readonly getStatusClass = getStatusClass;
     protected readonly getMatchClass = getMatchClass;
     protected readonly Math = Math;
+    protected readonly capitalize = capitalize;
 }
