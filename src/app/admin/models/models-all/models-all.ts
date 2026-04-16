@@ -18,8 +18,9 @@ import {MatSort, MatSortModule, Sort} from '@angular/material/sort';
 import {MatIcon} from '@angular/material/icon';
 import {MatIconButton} from '@angular/material/button';
 import {MatTooltip} from '@angular/material/tooltip';
-import {capitalize, scoreColumn, scoreColumnLabel, taskExplanation} from '../../../core/utils/helpers';
-import {DatePipe, DecimalPipe, PercentPipe} from '@angular/common';
+import {capitalize, getScoreColor, scoreColumn, scoreColumnLabel, taskExplanation} from '../../../core/utils/helpers';
+import {DatePipe, DecimalPipe, NgStyle, PercentPipe} from '@angular/common';
+import {RouterLink} from '@angular/router';
 
 @Component({
     selector: 'app-models-all',
@@ -42,7 +43,9 @@ import {DatePipe, DecimalPipe, PercentPipe} from '@angular/common';
         MatPaginator,
         DatePipe,
         PercentPipe,
-        DecimalPipe
+        DecimalPipe,
+        NgStyle,
+        RouterLink
     ],
     templateUrl: './models-all.html',
     styleUrl: './models-all.scss',
@@ -50,6 +53,16 @@ import {DatePipe, DecimalPipe, PercentPipe} from '@angular/common';
 export class ModelsAll implements OnInit {
     tasks: Task[] = [];
     modelsTables: ModelsTable[] = [];
+
+    displayedColumns: string[] = [
+        'model',
+        'version',
+        'inputType',
+        'outputType',
+        'score',
+        'lastTrained',
+        'actions',
+    ];
 
     constructor(
         private tasksApi: ApiTasks,
@@ -64,21 +77,14 @@ export class ModelsAll implements OnInit {
 
                 this.modelsTables = tasks.map(task => ({
                     task,
-                    displayedColumns: [
-                        'model',
-                        'version',
-                        'inputType',
-                        'outputType',
-                        'score',
-                        'lastTrained',
-                    ],
                     dataSource: new MatTableDataSource<ModelVersion>([]),
                     total: 0,
                     params: {
                         page: {offset: 0, limit: 25},
                         sort: {sort_by: 'model_id', order: 'asc'},
                         filters: {task_id: task.id}
-                    }
+                    },
+                    maxMae: 0,
                 }));
 
                 this.modelsTables.forEach(table => this.loadPage(table));
@@ -95,6 +101,12 @@ export class ModelsAll implements OnInit {
         this.modelsApi.getAll(table.params).subscribe(res => {
             table.dataSource.data = res.items;
             table.total = res.total;
+
+            const maes = res.items
+                .map(m => m.val_mae)
+                .filter(v => v !== null) as number[];
+
+            table.maxMae = maes.length ? Math.max(...maes) : 0;
         });
     }
 
@@ -116,12 +128,13 @@ export class ModelsAll implements OnInit {
     protected readonly capitalize = capitalize;
     protected readonly scoreColumn = scoreColumn;
     protected readonly scoreColumnLabel = scoreColumnLabel;
+    protected readonly getScoreColor = getScoreColor;
 }
 
 interface ModelsTable {
     task: Task;
-    displayedColumns: string[];
     dataSource: MatTableDataSource<ModelVersion>;
     total: number;
     params: RequestParams<ModelVersionSortBy, ModelFilters>;
+    maxMae: number;
 }

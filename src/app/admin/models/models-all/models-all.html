@@ -21,7 +21,7 @@
                 }
             </div>
 
-            <div class="card flex column gap-4 p-4 models">
+            <div class="card flex column gap-4 p-4 models table-container">
                 <table
                     mat-table
                     [dataSource]="table.dataSource"
@@ -75,14 +75,32 @@
 
                     <!-- Score -->
                     <ng-container matColumnDef="score">
-                        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="scoreColumn(table.task.name)">{{scoreColumnLabel(table.task.name)}}</th>
+                        <th mat-header-cell *matHeaderCellDef
+                            [mat-sort-header]="scoreColumn(table.task.name)">{{ scoreColumnLabel(table.task.name) }}
+                        </th>
                         <td mat-cell *matCellDef="let m">
                             @switch (table.task.name.toLowerCase()) {
                                 @case ("classification") {
-                                    {{ m.val_accuracy | percent:'1.0-2' }}
+                                    <div
+                                        class="badge"
+                                        [ngStyle]="{
+                                            backgroundColor: getScoreColor(m.val_accuracy, 'accuracy'),
+                                            color: 'white'
+                                        }"
+                                    >
+                                        {{ m.val_accuracy | percent:'1.0-2' }}
+                                    </div>
                                 }
                                 @case ("regression") {
-                                    ±{{ m.val_mae | number: '1.0-0' }} years
+                                    <div
+                                        class="badge"
+                                        [ngStyle]="{
+                                            backgroundColor: getScoreColor(m.val_mae, 'mae', table.maxMae),
+                                            color: 'white'
+                                        }"
+                                    >
+                                        ±{{ m.val_mae | number: '1.0-0' }} years
+                                    </div>
                                 }
                                 @default {
                                 }
@@ -98,8 +116,18 @@
                         </td>
                     </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="table.displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: table.displayedColumns"></tr>
+                    <!-- Actions -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let m">
+                            <button mat-icon-button [routerLink]="['/admin/models', m.model.id]" matTooltip="View Details" matTooltipPosition="above">
+                                <mat-icon>open_in_new</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
 
                 <mat-paginator

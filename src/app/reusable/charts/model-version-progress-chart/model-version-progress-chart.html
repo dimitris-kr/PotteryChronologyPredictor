@@ -1,0 +1,45 @@
+<div class="flex row wrap justify-between align-stretch gy-5">
+
+    <div class="w-9 flex align-stretch">
+        <div class="card p-4 w-100 flex column gap-2">
+            <h5>Model’s Progress per Version</h5>
+            <!-- Chart -->
+            <div
+                echarts
+                [options]="chartOption"
+                class="chart">
+            </div>
+        </div>
+    </div>
+    <div class="w-3 flex align-stretch">
+        <div class="card p-4 w-100 flex column gap-2">
+            <h6>Choose Value per Version</h6>
+            <!-- Controls -->
+            <div class="controls">
+                <mat-radio-group
+                    [(ngModel)]="selectedMetric"
+                    (change)="onMetricChange($event.value)"
+                    class="flex column gap-2"
+                >
+
+                    @if (task === 'classification') {
+                        <mat-radio-button value="accuracy">
+                            Accuracy
+                        </mat-radio-button>
+                    }
+
+                    @if (task === 'regression') {
+                        <mat-radio-button value="mae">
+                            Mean Absolute Error
+                        </mat-radio-button>
+                    }
+
+                    <mat-radio-button value="sample_size">
+                        Sample Size
+                    </mat-radio-button>
+
+                </mat-radio-group>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,15 +1,15 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {getApiUrl} from '../utils/request';
 import {HttpClient} from '@angular/common/http';
 import {RequestParams} from '../models/request-params';
 import {map, Observable} from 'rxjs';
 import {PaginatedResponse} from '../models/paginated-response';
 import {cleanParams} from '../utils/helpers';
-import {ModelFilters, ModelVersion, ModelVersionFilters, ModelVersionSortBy} from '../models/model';
+import {Model, ModelFilters, ModelVersion, ModelVersionFilters, ModelVersionSortBy} from '../models/model';
 import {parseBackendDate} from '../utils/dates';
 
 @Injectable({
-  providedIn: 'root',
+    providedIn: 'root',
 })
 export class ApiModels {
     private readonly url = getApiUrl('models');
@@ -36,7 +36,7 @@ export class ApiModels {
         params: RequestParams<ModelVersionSortBy, ModelVersionFilters>
     ): Observable<PaginatedResponse<ModelVersion>> {
         return this.http
-            .get<any>(this.url+'/versions', {params: {...params.page, ...params.sort, ...cleanParams(params.filters)}})
+            .get<any>(`${this.url}/versions`, {params: {...params.page, ...params.sort, ...cleanParams(params.filters)}})
             .pipe(
                 map(res => ({
                     items: res.items.map((raw: any) => this.normalize(raw)),
@@ -47,14 +47,22 @@ export class ApiModels {
             );
     }
 
-    getSingle(id: number): Observable<ModelVersion> {
+    getSingle(id: number): Observable<Model> {
         return this.http
-            .get(`${this.url}/${id}`)
-            .pipe(map(raw => this.normalize(raw)));
+            .get<Model>(`${this.url}/${id}`);
+    }
+
+
+    getSingleVersions(id: number): Observable<ModelVersion[]> {
+        return this.http
+            .get<any>(`${this.url}/${id}/versions`)
+            .pipe(
+                map(items => (items.map((raw: any) => this.normalize(raw))))
+            );
     }
 
     private normalize(raw: any): ModelVersion {
-        return  {
+        return {
             ...raw,
             created_at: parseBackendDate(raw.created_at),
         };

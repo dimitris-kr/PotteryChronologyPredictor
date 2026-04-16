@@ -159,3 +159,69 @@ export function capitalize(str: string): string {
         text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
     );
 }
+
+function hexToRgb(hex: string) {
+    const clean = hex.replace('#', '');
+    const bigint = parseInt(clean, 16);
+
+    return {
+        r: (bigint >> 16) & 255,
+        g: (bigint >> 8) & 255,
+        b: bigint & 255,
+    };
+}
+
+function rgbToCss({ r, g, b }: { r: number; g: number; b: number }) {
+    return `rgb(${Math.round(r)}, ${Math.round(g)}, ${Math.round(b)})`;
+}
+
+function interpolateColor(c1: any, c2: any, t: number) {
+    return {
+        r: c1.r + (c2.r - c1.r) * t,
+        g: c1.g + (c2.g - c1.g) * t,
+        b: c1.b + (c2.b - c1.b) * t,
+    };
+}
+
+const fixedMaxMae = 100;
+const GRAY = '#9E9E9E';
+const RED = hexToRgb('#c6564b');
+const YELLOW = hexToRgb('#C7A748');
+const GREEN = hexToRgb('#83A756');
+
+export function getScoreColor(value: number | null, type: 'accuracy' | 'mae', dataMaxMae?: number): string {
+    if (value === null || value === undefined) {
+        return GRAY;
+    }
+
+    let normalized: number;
+
+    if (type === 'accuracy') {
+        normalized = value; // assuming already 0–1
+    } else {
+        if (!dataMaxMae || dataMaxMae === 0) return GRAY;
+        const maxMae = Math.max(dataMaxMae, fixedMaxMae);
+        normalized = 1 - (value / maxMae); // invert (low = good)
+    }
+
+    normalized = Math.max(0, Math.min(1, normalized));
+
+    /*// 0 = red (0deg), 1 = green (120deg)
+    const hue = normalized * 120;
+
+    return `hsl(${hue}, 60%, 45%)`;*/
+
+    let color;
+
+    if (normalized < 0.5) {
+        // red → yellow
+        const t = normalized / 0.5;
+        color = interpolateColor(RED, YELLOW, t);
+    } else {
+        // yellow → green
+        const t = (normalized - 0.5) / 0.5;
+        color = interpolateColor(YELLOW, GREEN, t);
+    }
+
+    return rgbToCss(color);
+}
