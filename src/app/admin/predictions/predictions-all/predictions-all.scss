@@ -3,13 +3,16 @@
 }
 
 .mat-column-inputText {
-    width: 20%;
-    min-width: 130px;
+    width: 15%;
+    min-width: 100px;
 }
 
 .mat-column-createdAt {
-    width: 100px;
+    width: 110px;
 }
 
+.mat-column-actions {
+    padding: 0 !important;
+}
 
 

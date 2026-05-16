@@ -130,7 +130,7 @@ body {
     .inner {
         display: flex;
         flex-direction: column;
-        gap: 40px;
+        gap: var(--space-4);
     }
 }
 
@@ -229,11 +229,11 @@ h4 {
 }
 
 h5 {
-    font-size: 18px;
+    font-size: 17px;
 }
 
 h6 {
-    font-size: 15px;
+    font-size: 14px;
     text-transform: uppercase;
 }
 
@@ -293,17 +293,79 @@ mat-icon {
     border-color: var(--mat-button-text-label-text-color, var(--mat-sys-primary));;
 }
 
-.mdc-button.danger {
+.mdc-button.bold {
+    --mat-button-text-label-text-weight: 600 !important;
+}
+
+.mat-mdc-button-base.danger {
     --mat-button-text-label-text-color: var(--danger);
 }
 
-.mdc-button.danger.border {
+.mdc-icon-button.danger .mat-icon {
+    color: var(--danger);
+}
+
+.mat-mdc-button-base.danger.border {
     border-width: 1.5px;
 }
 
 .mdc-button[matbutton="filled"].danger {
     --mat-button-filled-container-color: var(--danger);
     color: white;
+}
+
+.mdc-icon-button {
+    --mat-icon-button-container-shape: var(--radius-sm);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 !important;
+}
+
+.mat-mdc-button-base.btn-sm {
+    --btn-size: 32px;
+    --icon-size: 17px;
+    height: var(--btn-size) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+
+    .mdc-button__ripple {
+        height: var(--btn-size) !important;
+    }
+
+    .mat-mdc-button-touch-target {
+        width: var(--btn-size) !important;
+        height: var(--btn-size) !important;
+    }
+
+    .mat-icon {
+        width: var(--icon-size);
+        height: var(--icon-size);
+        font-size: var(--icon-size);
+        margin: 0 !important;
+    }
+
+    &.mdc-icon-button {
+        padding: 0 !important;
+        width: var(--btn-size);
+    }
+
+    &.border:not(.mdc-icon-button) {
+        padding: 0 10px !important;
+    }
+}
+
+.mat-mdc-button-base.btn-link {
+    padding: 0 !important;
+    background-color: transparent !important;
+    --mat-button-text-label-text-color: var(--text-color-secondary);
+
+    &:hover {
+        --mat-button-text-label-text-color: var(--text-color-accent);
+    }
 }
 
     // FORM
@@ -422,7 +484,12 @@ table {
     text-transform: capitalize;
     width: fit-content;
     font-weight: 600;
-    font-size: 13px;
+    font-size: 12px;
+
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    gap: var(--space-1);
 
     &.primary {
         background-color: var(--beige-20);
@@ -457,8 +524,22 @@ table {
 
     &.card-title {
         position: absolute;
-        top: -12px;
-        left: 18px;
+        top: 0;
+        left: 0;
+        border-radius: var(--radius-sm) 0 var(--radius-sm) 0;
+        padding: 2px 10px;
+    }
+
+    &.large {
+        font-size: 16px;
+        padding: 8px 14px;
+        border-radius: var(--radius-sm);
+    }
+
+    .mat-icon {
+        width: 1rem;
+        height: 1rem;
+        font-size: 1rem;
     }
 }
 
@@ -614,3 +695,4 @@ html {
 .mat-button-toggle-group-appearance-standard {
     border-radius: var(--radius-sm) !important;
 }
+

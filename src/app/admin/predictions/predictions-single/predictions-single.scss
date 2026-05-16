@@ -1,18 +1,29 @@
 .legend-wrapper {
-    max-width: 160px;
+    //max-width: 300px;
+    width: calc(100% - 340px);
+    min-width: 300px;
 
-    table.vertical.legend {
-        td {
-            font-weight: 400;
-            color: var(--text-color-body);
-            text-align: right;
-        }
+    .legend {
+        column-count: 2;
+        column-gap: 15%;
 
-        tr:first-child {
-            th, td {
+        .legend-row {
+            break-inside: avoid;
+            border-bottom: 1px solid var(--black-15);
+            min-height: 30px;
+
+            &:first-child {
                 font-weight: 600 !important;
                 color: var(--text-color-secondary);
             }
+        }
+    }
+}
+
+@media screen and (max-width: 1150px) {
+    .legend-wrapper {
+        .legend {
+            column-count: 1;
         }
     }
 }

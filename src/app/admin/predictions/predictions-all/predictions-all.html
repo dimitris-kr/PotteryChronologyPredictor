@@ -1,5 +1,5 @@
 <div class="inner">
-    <div class="px-4">
+    <div class="px-2">
         <h1>Predictions</h1>
         <p>Here you can find all past predictions made on the app.</p>
     </div>
@@ -117,7 +117,7 @@
                 <th mat-header-cell *matHeaderCellDef>Input Description</th>
                 <td mat-cell *matCellDef="let p">
                     @if (p.input_text) {
-                        {{ shorten(p.input_text) }} ...
+                        {{ shorten(p.input_text, 5) }} ...
                     } @else {
                         -
                     }
@@ -188,8 +188,9 @@
             <ng-container matColumnDef="actions">
                 <th mat-header-cell *matHeaderCellDef></th>
                 <td mat-cell *matCellDef="let p">
-                    <button mat-icon-button [routerLink]="['/admin/predictions', p.id]" matTooltip="View Details" matTooltipPosition="above">
-                        <mat-icon>open_in_new</mat-icon>
+                    <button mat-icon-button [routerLink]="['/admin/predictions', p.id]" matTooltip="View Prediction Details" matTooltipPosition="above" class="btn-sm border" >
+<!--                        More-->
+                        <mat-icon iconPositionEnd>arrow_forward</mat-icon>
                     </button>
                 </td>
             </ng-container>

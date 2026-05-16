@@ -1,165 +1,180 @@
 <div class="inner">
-    <div class="px-4 flex column gap-3">
-        <div class="flex row wrap justify-between align-center">
+    <div class="px-2 flex column gap-3">
+        <div class="flex column gap-0 justify-start align-start">
             <h1 class="m-0">Predictions</h1>
-            <button mat-icon-button routerLink="/admin/predictions" matTooltip="Back to All Predictions"
-                    matTooltipPosition="above">
-                <mat-icon>close_fullscreen</mat-icon>
+            <button mat-button routerLink="/admin/predictions" class="btn-sm btn-link bold">
+                <mat-icon>arrow_back</mat-icon>
+                Back to All Predictions
             </button>
+
+
         </div>
         @if (prediction) {
-            <div class="flex column gap-2">
-                <h3 class="m-0">Prediction #{{ prediction.id }}</h3>
-                <div class="meta flex row wrap gap-3">
-                    <div>
-                        Created: <strong>{{ prediction.created_at | date:'medium' }}</strong>
-                    </div>
-                </div>
-            </div>
+
         }
     </div>
 
     @if (prediction) {
 
-        <div class="flex row wrap justify-between align-stretch gy-4">
-            <div class="w-100 flex align-stretch input-data">
-                <div class="card w-100 p-4 flex column gap-4">
-                    <div class="flex column gap-3">
-                        <div class="flex row gap-2 justify-start align-center">
-                            <h5 class="m-0">Input Data</h5>
-                            <button
-                                matIconButton
-                                aria-label="help"
-                                matTooltip="The text and/or image that was submitted for this prediction."
-                                matTooltipPosition="after"
-                            >
-                                <mat-icon>info</mat-icon>
-                            </button>
+        <div class="flex column gy-6">
+            <div class="flex row wrap justify-between align-stretch gy-4">
+                <div class="w-100 px-2 flex row justify-between align-start gy-2">
+                    <div class="flex column gap-2">
+                        <h3 class="m-0">Prediction #{{ prediction.id }}</h3>
+                        <div class="meta flex row wrap gap-3">
+                            <div>
+                                Created: <strong>{{ prediction.created_at | date:'medium' }}</strong>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="flex row wrap justify-between gy-2">
-                            <!-- Description (read-only) -->
-                            <div class="w-6">
-                                <mat-form-field appearance="outline" floatLabel="always"
-                                                class="w-100 description-field">
-                                    <mat-label>Description</mat-label>
+                    <button mat-icon-button class="border danger w-auto"
+                            [matTooltip]="'Delete Prediction #' + prediction.id"
+                            matTooltipPosition="above"
+                            (click)="openDeleteDialog()">
+                        <mat-icon>delete</mat-icon>
+<!--                        <span>Delete Prediction</span>-->
+                    </button>
 
-                                    <textarea
-                                        matInput
-                                        rows="7"
-                                        readonly
-                                        [value]="prediction.input_text || '-'"
-                                        placeholder="-"
-                                        disabled
-                                    ></textarea>
-                                </mat-form-field>
+                </div>
+
+                <div class="w-100 flex align-stretch input-data">
+                    <div class="card w-100 p-4 flex column gap-4">
+                        <div class="flex column gap-3">
+                            <div class="flex row gap-2 justify-start align-center">
+                                <h5 class="m-0">Input Data</h5>
+                                <button
+                                    matIconButton
+                                    aria-label="help"
+                                    matTooltip="The text and/or image that was submitted for this prediction."
+                                    matTooltipPosition="after"
+                                >
+                                    <mat-icon>info</mat-icon>
+                                </button>
                             </div>
 
-                            <!-- Image (read-only) -->
-                            <div class="w-6">
-                                <div
-                                    class="image-upload readonly"
-                                >
-                                    <span class="label">Image</span>
+                            <div class="flex row wrap justify-between gy-2">
+                                <!-- Description (read-only) -->
+                                <div class="w-6">
+                                    <mat-form-field appearance="outline" floatLabel="always"
+                                                    class="w-100 description-field">
+                                        <mat-label>Description</mat-label>
 
-                                    @if (prediction.input_image_path) {
-                                        @if (imageUrl) {
-                                            <img [src]="imageUrl" loading="lazy" alt="Pottery Image"/>
+                                        <textarea
+                                            matInput
+                                            rows="7"
+                                            readonly
+                                            [value]="prediction.input_text || '-'"
+                                            placeholder="-"
+                                            disabled
+                                        ></textarea>
+                                    </mat-form-field>
+                                </div>
+
+                                <!-- Image (read-only) -->
+                                <div class="w-6">
+                                    <div
+                                        class="image-upload readonly"
+                                    >
+                                        <span class="label">Image</span>
+
+                                        @if (prediction.input_image_path) {
+                                            @if (imageUrl) {
+                                                <img [src]="imageUrl" loading="lazy" alt="Pottery Image"/>
+                                            } @else {
+                                                <div class="placeholder">
+                                                    <mat-spinner diameter="25"></mat-spinner>
+                                                </div>
+                                            }
                                         } @else {
                                             <div class="placeholder">
-                                                <mat-spinner diameter="25"></mat-spinner>
+                                                <mat-icon class="upload-icon">image_not_supported</mat-icon>
+                                                <p>No image provided</p>
                                             </div>
                                         }
-                                    } @else {
-                                        <div class="placeholder">
-                                            <mat-icon class="upload-icon">image_not_supported</mat-icon>
-                                            <p>No image provided</p>
-                                        </div>
-                                    }
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="flex column gap-3">
-                        <div class="flex row gap-2 justify-start align-center">
-                            <h5 class="m-0">Chronology Type</h5>
-                            <button
-                                matIconButton
-                                aria-label="help"
-                                matTooltip="The type of chronology that was predicted."
-                                matTooltipPosition="after"
-                            >
-                                <mat-icon>info</mat-icon>
-                            </button>
-                        </div>
+                        <div class="flex column gap-3">
+                            <div class="flex row gap-2 justify-start align-center">
+                                <h5 class="m-0">Chronology Type</h5>
+                                <button
+                                    matIconButton
+                                    aria-label="help"
+                                    matTooltip="The type of chronology that was predicted."
+                                    matTooltipPosition="after"
+                                >
+                                    <mat-icon>info</mat-icon>
+                                </button>
+                            </div>
 
-                        <div>
-                            <mat-button-toggle-group
-                                [value]="isClassification(prediction) ? 'classification' : 'regression'"
-                                disabled
-                                class="chronology-toggle readonly"
-                            >
-                                <mat-button-toggle value="classification">
-                                    Historical Period
-                                </mat-button-toggle>
+                            <div>
+                                <mat-button-toggle-group
+                                    [value]="isClassification(prediction) ? 'classification' : 'regression'"
+                                    disabled
+                                    class="chronology-toggle readonly"
+                                >
+                                    <mat-button-toggle value="classification">
+                                        Historical Period
+                                    </mat-button-toggle>
 
-                                <mat-button-toggle value="regression">
-                                    Exact Years
-                                </mat-button-toggle>
-                            </mat-button-toggle-group>
+                                    <mat-button-toggle value="regression">
+                                        Exact Years
+                                    </mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="flex row wrap justify-between align-stretch gy-4">
-            <div class="w-100 flex align-stretch">
-                <div class="card w-100 p-4 flex column justify-center prediction chronology">
-                    <div class="badge accent card-title">
-                        Predicted {{ isClassification(prediction) ? 'Historical Period' : 'Year Range' }}
+                <div class="w-100 flex align-stretch">
+                    <div class="card w-100 p-4 flex column justify-center prediction chronology">
+                        <div class="badge accent card-title">
+                            <mat-icon>auto_awesome</mat-icon>
+                            <span>
+                            Predicted {{ isClassification(prediction) ? 'Historical Period' : 'Year Range' }}
+                        </span>
+                        </div>
+
+                        @if (isClassification(prediction)) {
+                            <div class="flex row nowrap justify-start align-center gap-2">
+                                <div class="indicator"
+                                     [ngStyle]="{'background-color': getColor(prediction.historical_period.name)}"></div>
+                                <div class="display m-0">{{ prediction.historical_period.name }}</div>
+                            </div>
+                        } @else {
+                            <div class="display m-0">{{ formatYear(prediction.start_year) }}
+                                – {{ formatYear(prediction.end_year) }}
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex row wrap justify-between align-stretch gy-4">
+
+                <div class="w-100 px-2 flex column gy-2">
+                    <div class="flex row wrap justify-start align-center gap-2">
+                        <h3 class="m-0">Feedback: True Chronology</h3>
+                        <div class="badge" [ngClass]="getStatusClass(prediction)">
+                            {{ prediction.status }}
+                        </div>
                     </div>
 
-                    @if (isClassification(prediction)) {
-                        <div class="flex row nowrap justify-start align-center gap-2">
-                            <div class="indicator"
-                                 [ngStyle]="{'background-color': getColor(prediction.historical_period.name)}"></div>
-                            <div class="display m-0">{{ prediction.historical_period.name }}</div>
-                        </div>
+                    @if (prediction.status === "validated" && prediction.pottery_item) {
+                        <p>Feedback with the true chronology of the input data has been given for this prediction.</p>
                     } @else {
-                        <div class="display m-0">{{ formatYear(prediction.start_year) }}
-                            – {{ formatYear(prediction.end_year) }}
-                        </div>
+                        <h6 class="m-0">Is this prediction correct?</h6>
+                        <p>
+                            Give feedback to the model to help it learn and make better predictions in the future.
+                        </p>
                     }
-                </div>
-            </div>
-        </div>
-
-        <div class="flex column gap-4">
-
-            <div class="px-4">
-                <div class="flex row wrap justify-start align-center gap-2">
-                    <h3>Feedback: True Chronology</h3>
-                    <div class="badge" [ngClass]="getStatusClass(prediction)">
-                        {{ prediction.status }}
-                    </div>
                 </div>
 
                 @if (prediction.status === "validated" && prediction.pottery_item) {
-                    <p>Feedback with the true chronology of the input data has been given for this prediction.</p>
-                } @else {
-                    <h6>Is this prediction correct?</h6>
-                    <p>
-                        Give feedback to the model to help it learn and make better predictions in the future.
-                    </p>
-                }
 
-            </div>
-
-            @if (prediction.status === "validated" && prediction.pottery_item) {
-
-                <div class="flex row wrap justify-between align-stretch gy-5">
                     @if (prediction.pottery_item.chronology_label) {
                         @if (isClassification(prediction)) {
                             <div class="w-100 flex align-stretch">
@@ -191,16 +206,15 @@
                             </div>
                         }
                         <div class="w-4 flex align-stretch">
-                            <div class="card w-100 p-4 flex column justify-center">
+                            <div class="card w-100 p-4 flex column justify-center gy-2">
                                 <div class="badge primary card-title">
                                     Comparison
                                 </div>
-                                <div class="badge" [ngClass]="getMatchClass(prediction)"
-                                     [matTooltip]="matchExplanation(prediction)" matTooltipPosition="above"
-                                     style="font-size: 15px">
+                                <div class="badge large" [ngClass]="getMatchClass(prediction)"
+                                     [matTooltip]="matchExplanation(prediction)" matTooltipPosition="above">
                                     {{ prediction.match === 'none' ? 'No' : prediction.match }} Match
                                 </div>
-                                <small>between predicted and true chronology</small>
+                                <span>between predicted and true chronology</span>
                             </div>
                         </div>
                     }
@@ -214,8 +228,8 @@
                                 <h5>Pottery Item #{{ prediction.pottery_item.id }}</h5>
 
                                 <a mat-button [routerLink]="['/admin/data', prediction.pottery_item.id]" class="border">
-                                View Item
-                            </a>
+                                    View Item
+                                </a>
                             </div>
                             <table class="vertical w-100">
                                 <!--<tr>
@@ -244,7 +258,8 @@
                                                     – {{ formatYear(prediction.pottery_item.chronology_label.end_year) }}
                                                 </span>
                                                 <span>//</span>
-                                                <span>{{ prediction.pottery_item.chronology_label.historical_period.name }} Period</span>
+                                                <span>{{ prediction.pottery_item.chronology_label.historical_period.name }}
+                                                    Period</span>
                                             </div>
                                         </td>
                                     </tr>
@@ -259,82 +274,100 @@
 
                         </div>
                     </div>
-                </div>
 
-            } @else {
-                <div class="card px-4 py-2">
-                    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-                        <mat-tab label="Create New Pottery Item">
-                            <div class="py-4 flex column gap-3">
-                                <p>
-                                    Submit the true chronology for this prediction's input data to validate it and
-                                    create a new pottery item in the pottery dataset.
-                                </p>
-                                <app-feedback-create-form
-                                    [predictionId]="prediction.id"
-                                    (created)="reloadPrediction()"
-                                >
-                                </app-feedback-create-form>
-                            </div>
-                        </mat-tab>
-                        <mat-tab label="Connect to Existing Pottery Item">
-                            <div class="py-4 flex column gap-3">
-                                <p>
-                                    Search and select the pottery item with already validated chronology, you wish to
-                                    connect this prediction to.
-                                </p>
-                                <app-feedback-connect-form
-                                    [predictionId]="prediction.id"
-                                    (connected)="reloadPrediction()"
-                                >
-                                </app-feedback-connect-form>
-                            </div>
+                } @else {
+                    <div class="card px-4 py-2 w-100">
+                        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+                            <mat-tab label="Create New Pottery Item">
+                                <div class="py-4 flex column gap-3">
+                                    <p>
+                                        Submit the true chronology for this prediction's input data to validate it and
+                                        create a new pottery item in the pottery dataset.
+                                    </p>
+                                    <app-feedback-create-form
+                                        [predictionId]="prediction.id"
+                                        (created)="reloadPrediction()"
+                                    >
+                                    </app-feedback-create-form>
+                                </div>
+                            </mat-tab>
+                            <mat-tab label="Connect to Existing Pottery Item">
+                                <div class="py-4 flex column gap-3">
+                                    <p>
+                                        Search and select the pottery item with already validated chronology, you wish
+                                        to
+                                        connect this prediction to.
+                                    </p>
+                                    <app-feedback-connect-form
+                                        [predictionId]="prediction.id"
+                                        (connected)="reloadPrediction()"
+                                    >
+                                    </app-feedback-connect-form>
+                                </div>
 
-                        </mat-tab>
-                    </mat-tab-group>
-                </div>
+                            </mat-tab>
+                        </mat-tab-group>
+                    </div>
+                }
 
-            }
-
-        </div>
-
-        <div class="flex column gap-4">
-            <div class="px-4">
-                <h3 class="m-0">Prediction Breakdown</h3>
             </div>
 
-            <div class="flex row wrap justify-between align-stretch gy-5">
+            <div class="flex row wrap justify-between align-stretch gy-4">
+                <div class="px-2 w-100 flex column gy-2">
+                    <h3 class="m-0">Prediction Breakdown</h3>
+
+
+                        @if (isClassification(prediction)) {
+                            <p>
+                                of predicted period =
+                            <strong>
+                                {{ prediction.historical_period.name }}
+                            </strong>
+                            </p>
+                        } @else {
+                            <p>
+                                of predicted year range: <strong>{{ formatYear(prediction.start_year) }}
+                                – {{ formatYear(prediction.end_year) }}</strong>
+                            </p>
+                            <p>derived from predicted values:</p>
+                            <pre class="m-0"><strong>start_year            =  {{ prediction.start_year }}<br>start_end_difference  =  {{ prediction.year_range }} years</strong></pre>
+                        }
+
+
+
+                </div>
+
                 @if (prediction.breakdown) {
                     @if (isClassification(prediction)) {
-                        <div class="w-7 flex align-stretch">
+                        <div class="w-100 flex align-stretch">
                             <div class="card p-4 w-100">
                                 <div class="badge primary card-title">
                                     Predicted Period Probabilities
                                 </div>
-                                <div class="flex row wrap justify-center align-center gap-3">
+                                <div class="flex row wrap justify-center align-center gy-3 gx-5">
                                     <app-classification-breakdown-chart [breakdown]="prediction.breakdown">
                                     </app-classification-breakdown-chart>
 
-                                    <div class="legend-wrapper">
-                                        <h6>Probability of Pottery Item belonging in each Period</h6>
-                                        <table class="vertical legend w-100">
+                                    <div class="legend-wrapper flex column gy-4">
+                                        <h6 class="m-0">Probability of Pottery Item belonging in each Period</h6>
+                                        <div class="legend w-100">
                                             @for (probability of sortedProbabilities; track probability.name; ) {
-                                                <tr>
-                                                    <th>
-                                                        <div class="flex row nowrap justify-start align-center gap-1">
-                                                            <div class="indicator small"
-                                                                 [ngStyle]="{'background-color': getColor(probability.name)}"></div>
-                                                            <div>
-                                                                {{ probability.name }}
-                                                            </div>
+                                                <div class="legend-row flex row justify-between align-center p-1 gap-2">
+                                                    <div
+                                                        class="flex row nowrap justify-start align-center gap-1">
+                                                        <div class="indicator small"
+                                                             [ngStyle]="{'background-color': getColor(probability.name)}"></div>
+                                                        <div>
+                                                            {{ probability.name }}
                                                         </div>
-                                                    </th>
-                                                    <td>
+                                                    </div>
+
+                                                    <div class="flex row justify-end align-center">
                                                         {{ probability.value | percent:'1.2-2' }}
-                                                    </td>
-                                                </tr>
+                                                    </div>
+                                                </div>
                                             }
-                                        </table>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -381,7 +414,7 @@
                             <div class="w-5 flex align-stretch">
                                 <div class="card p-4 w-100 flex column gap-3">
                                     <div class="badge primary card-title">
-                                        Year Range Analysis
+                                        Start-End Difference Analysis
                                     </div>
                                     <app-regression-breakdown-chart
                                         [breakdown]="prediction.breakdown.year_range"
@@ -411,95 +444,129 @@
                     }
                 }
 
-                <div class="w-5 flex align-stretch">
-                    <div class="card p-4 w-100">
+                <div class="w-100 flex align-stretch">
+                    <div class="card p-4 w-100 flex wrap justify-between align-stretch gy-3">
                         <div class="badge primary card-title">
                             Predictive Model Used
                         </div>
 
-                        <table class="vertical w-100">
-                            <tbody>
-                            <tr>
-                                <th>Name</th>
-                                <td><span class="word-break-all">{{ prediction.model_version.model.name }}</span></td>
-                            </tr>
-                            <tr>
-                                <th>Version</th>
-                                <td>{{ prediction.model_version.version }}</td>
-                            </tr>
-                            <tr>
-                                <th>Input</th>
-                                <td>
-                                    @for (ft of prediction.model_version.model.feature_sets; track ft.id; let idx = $index) {
-                                        {{ capitalize(ft.data_type) }}
-                                        @if (idx < prediction.model_version.model.feature_sets.length - 1) {
-                                            &
+                        <div class="w-6">
+
+                            <table class="vertical w-100">
+                                <tbody>
+                                <tr>
+                                    <th colspan="2">
+                                        <h6 class="m-0">Model</h6>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Name</th>
+                                    <td><span
+                                        class="word-break-all">{{ prediction.model_version.model.name }}</span></td>
+                                </tr>
+                                <tr>
+                                    <th>Task</th>
+                                    <td>{{ prediction.model_version.model.task.name }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Input</th>
+                                    <td>
+                                        @for (ft of prediction.model_version.model.feature_sets; track ft.id; let idx = $index) {
+                                            {{ capitalize(ft.data_type) }}
+                                            @if (idx < prediction.model_version.model.feature_sets.length - 1) {
+                                                &
+                                            }
                                         }
-                                    }
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Output</th>
-                                <td>
-                                    @for (t of prediction.model_version.model.targets; track t.id; let idx = $index) {
-                                        {{ capitalize(t.name) }}
-                                        @if (idx < prediction.model_version.model.targets.length - 1) {
-                                            &
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Output</th>
+                                    <td>
+                                        @for (t of prediction.model_version.model.targets; track t.id; let idx = $index) {
+                                            {{ capitalize(t.name) }}
+                                            @if (idx < prediction.model_version.model.targets.length - 1) {
+                                                &
+                                            }
                                         }
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="w-5">
+                            <table class="vertical w-100">
+                                <tbody>
+                                <tr>
+                                    <th colspan="2">
+                                        <h6 class="m-0">Model Version</h6>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th>Version</th>
+                                    <td>{{ prediction.model_version.version }}</td>
+                                </tr>
+
+                                    @if (prediction.model_version.val_accuracy) {
+                                        <tr>
+                                            <th>Accuracy</th>
+                                            <td>{{ prediction.model_version.val_accuracy | percent:'1.0-2' }}</td>
+                                        </tr>
+                                    } @else if (prediction.model_version.val_mae) {
+                                        <tr>
+                                            <th>Avg. Difference</th>
+                                            <td>±{{ prediction.model_version.val_mae | number: '1.0-0' }} years</td>
+                                        </tr>
                                     }
-                                </td>
-                            </tr>
-                                @if (prediction.model_version.val_accuracy) {
-                                    <tr>
-                                        <th>Accuracy</th>
-                                        <td>{{ prediction.model_version.val_accuracy | percent:'1.0-2' }}</td>
-                                    </tr>
-                                } @else if (prediction.model_version.val_mae) {
-                                    <tr>
-                                        <th>Avg. Difference</th>
-                                        <td>±{{ prediction.model_version.val_mae | number: '1.0-0' }} years</td>
-                                    </tr>
-                                }
-                            <tr>
-                                <th>Train Set</th>
-                                <td>{{ prediction.model_version.train_sample_size }} samples</td>
-                            </tr>
-                            <tr>
-                                <th>Trained</th>
-                                <td>{{ prediction.model_version.created_at | date: 'medium' }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                <tr>
+                                    <th>Train Set</th>
+                                    <td>{{ prediction.model_version.train_sample_size }} samples</td>
+                                </tr>
+                                <tr>
+                                    <th>Trained</th>
+                                    <td>{{ prediction.model_version.created_at | date: 'medium' }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="w-100">
+                            <a mat-button [routerLink]="['/admin/models', prediction.model_version.model.id]"
+                               class="border">
+                                View Model
+                            </a>
+                        </div>
+
                     </div>
                 </div>
 
             </div>
 
+            <!--<div class="flex column gy-4">
+                <div class="px-2">
+                    <h3 class="m-0">More Actions</h3>
+                </div>
+
+                <div class="card p-4 flex row wrap justify-between align-center gap-3">
+                    <div class="w-auto">
+                        <button mat-button class="border danger w-auto" (click)="openDeleteDialog()">
+                            <mat-icon>delete</mat-icon>
+                            <span>Delete Prediction</span>
+                        </button>
+                    </div>
+                    <div class="flex row wrap gap-2 w-auto">
+                        <a mat-button routerLink="/admin/predictions" class="border w-auto">
+                            View All Predictions
+                        </a>
+                        <a mat-button routerLink="/admin/predictions/new" class="border w-auto">
+                            Make New Prediction
+                        </a>
+
+                    </div>
+                </div>
+            </div>-->
         </div>
 
-        <div class="flex column gap-3">
-            <div class="px-4">
-                <h3 class="m-0">More Actions</h3>
-            </div>
-
-            <div class="card p-4 flex row wrap justify-between align-center gap-3">
-                <div class="w-auto">
-                    <button mat-button class="border danger w-auto" (click)="openDeleteDialog()">
-                        <mat-icon>delete</mat-icon>
-                        <span>Delete Prediction</span>
-                    </button>
-                </div>
-                <div class="flex row wrap gap-2 w-auto">
-                    <a mat-button routerLink="/admin/predictions" class="border w-auto">
-                        View All Predictions
-                    </a>
-                    <a mat-button routerLink="/admin/predictions/new" class="border w-auto">
-                        Make New Prediction
-                    </a>
-
-                </div>
-            </div>
-        </div>
 
         <ng-template #deleteDialog>
             <h3 mat-dialog-title>Are you sure you want to delete Prediction #{{ prediction.id }}?</h3>
