@@ -1,18 +1,17 @@
 .mat-column-inputImage {
     width: 50px;
+    min-width: unset;
 }
 
 .mat-column-inputText {
     width: 15%;
-    min-width: 100px;
 }
 
 .mat-column-createdAt {
     width: 110px;
 }
 
-.mat-column-actions {
-    padding: 0 !important;
+.mat-column-result,
+.mat-column-feedback {
+    min-width: 160px;
 }
-
-

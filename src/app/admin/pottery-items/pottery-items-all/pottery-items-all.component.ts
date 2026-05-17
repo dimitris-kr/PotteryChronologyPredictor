@@ -22,7 +22,7 @@ import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {debounceTime, forkJoin, Observable, tap} from 'rxjs';
 import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
 import {
-    formatYear,
+    formatYear, getColor,
     getMatchClass,
     getTrainDataClass,
     matchExplanation,
@@ -30,7 +30,7 @@ import {
     trainDataExplanation
 } from '../../../core/utils/helpers';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
-import {AsyncPipe, DatePipe, JsonPipe, NgClass} from '@angular/common';
+import {AsyncPipe, DatePipe, JsonPipe, NgClass, NgStyle} from '@angular/common';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
@@ -43,6 +43,7 @@ import {MatOption, MatSelect} from '@angular/material/select';
 import {DataSource, DataSourceFilters} from '../../../core/models/data-source';
 import {ApiDataSources} from '../../../core/services/api-data-sources';
 import {MatSlider, MatSliderRangeThumb} from '@angular/material/slider';
+import {MatBadge} from '@angular/material/badge';
 
 
 @Component({
@@ -79,7 +80,9 @@ import {MatSlider, MatSliderRangeThumb} from '@angular/material/slider';
         MatOption,
         AsyncPipe,
         MatSlider,
-        MatSliderRangeThumb
+        MatSliderRangeThumb,
+        NgStyle,
+        MatBadge
     ],
     templateUrl: './pottery-items-all.component.html',
     styleUrl: './pottery-items-all.component.scss',
@@ -251,14 +254,34 @@ export class PotteryItemsAll implements OnInit {
         );
     }
 
-    activeFilters(): boolean {
+    activeFilterInTrainingSet(): boolean {
         const values = this.filtersForm.value;
+        return (
+            values.in_train_set === true ||
+            values.in_train_set === false
+        );
+    }
+
+    activeFiltersCount(): number {
+        const values = this.filtersForm.value;
+        let count: number = 0;
+        if (values.historical_period_id) count++;
+        if (values.data_source_id) count++;
+        if (this.activeFilterInTrainingSet()) count++;
+        if (this.activeFilterYearRange()) count++;
+        return count;
+    }
+
+    activeFilters(): boolean {
+        /*const values = this.filtersForm.value;
         return (
             values.historical_period_id ||
             values.data_source_id ||
-            values.in_train_set ||
+            // values.in_train_set !== undefined ||
+            this.activeFilterInTrainingSet() ||
             this.activeFilterYearRange()
-        );
+        );*/
+        return this.activeFiltersCount() > 0;
     }
 
     ngOnDestroy() {
@@ -271,4 +294,5 @@ export class PotteryItemsAll implements OnInit {
     protected readonly formatYear = formatYear;
     protected readonly getTrainDataClass = getTrainDataClass;
     protected readonly trainDataExplanation = trainDataExplanation;
+    protected readonly getColor = getColor;
 }

@@ -26,6 +26,8 @@ import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {MatFormField, MatLabel} from '@angular/material/input';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatTooltip} from '@angular/material/tooltip';
+import {MatRipple} from '@angular/material/core';
+import {MatBadge} from '@angular/material/badge';
 
 @Component({
     selector: 'app-predictions-all',
@@ -58,7 +60,8 @@ import {MatTooltip} from '@angular/material/tooltip';
         ReactiveFormsModule,
         MatButton,
         NgClass,
-        MatTooltip
+        MatTooltip,
+        MatBadge,
     ],
     templateUrl: './predictions-all.html',
     styleUrl: './predictions-all.scss',
@@ -184,9 +187,21 @@ export class PredictionsAll implements OnInit {
         });
     }
 
-    activeFilters(): boolean {
+    activeFiltersCount(): number {
         const values = this.filtersForm.value;
-        return values.input_type || values.output_type || values.status || values.match;
+        let count: number = 0;
+        if (values.input_type) count++;
+        if (values.output_type) count++;
+        if (values.status) count++;
+        if (values.match) count++;
+        return count;
+    }
+
+    activeFilters(): boolean {
+        return this.activeFiltersCount() > 0;
+
+        /*const values = this.filtersForm.value;
+        return values.input_type || values.output_type || values.status || values.match;*/
     }
 
     ngOnDestroy() {

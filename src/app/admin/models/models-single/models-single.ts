@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
 import {Model, ModelVersion, ModelVersionFilters, ModelVersionSortBy, TargetScores} from '../../../core/models/model';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {ApiModels} from '../../../core/services/api-models';
 import {filter, map, switchMap} from 'rxjs';
 import {MatIcon} from '@angular/material/icon';
-import {MatIconButton} from '@angular/material/button';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatTooltip} from '@angular/material/tooltip';
 import {capitalize, getScoreColor, scoreColumn, scoreColumnLabel, taskExplanation} from '../../../core/utils/helpers';
 import {
@@ -24,13 +24,12 @@ import {
     ModelVersionProgressChart
 } from '../../../reusable/charts/model-version-progress-chart/model-version-progress-chart';
 import {ModelScoresChart} from '../../../reusable/charts/model-scores-chart/model-scores-chart';
+import {Breadcrumb} from '../../../core/services/breadcrumb';
 
 @Component({
     selector: 'app-models-single',
     imports: [
         MatIcon,
-        MatIconButton,
-        MatTooltip,
         RouterLink,
         MatSort,
         MatTable,
@@ -50,7 +49,8 @@ import {ModelScoresChart} from '../../../reusable/charts/model-scores-chart/mode
         DatePipe,
         MatPaginator,
         ModelVersionProgressChart,
-        ModelScoresChart
+        ModelScoresChart,
+        MatButton
     ],
     templateUrl: './models-single.html',
     styleUrl: './models-single.scss',
@@ -89,6 +89,8 @@ export class ModelsSingle {
     constructor(
         private route: ActivatedRoute,
         private modelsApi: ApiModels,
+        private router: Router,
+        private breadcrumb: Breadcrumb,
     ) {
     }
 
@@ -101,6 +103,8 @@ export class ModelsSingle {
             )
             .subscribe(model => {
                 this.model = model;
+                this.breadcrumb.setLabel(this.router.url, model.name);
+
                 this.versions.params.filters.model_id = model.id;
                 this.loadVersions();
                 this.loadAllVersions();

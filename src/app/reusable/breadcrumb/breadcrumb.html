@@ -1,0 +1,20 @@
+<nav class="breadcrumb flex row wrap gx-0 gy-1 justify-start align-center">
+    @for (crumb of crumbs(); track crumb.url; let last = $last) {
+        @if (!last) {
+            <a
+                mat-button
+                [routerLink]="crumb.url"
+                class="btn-sm btn-link breadcrumb-link"
+            >
+                {{ crumb.label }}
+            </a>
+            <span class="separator">
+                <mat-icon>chevron_forward</mat-icon>
+            </span>
+        } @else {
+            <span class="current">
+                {{ crumb.label }}
+            </span>
+        }
+    }
+</nav>

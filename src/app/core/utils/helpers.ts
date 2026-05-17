@@ -42,7 +42,7 @@ export function matchExplanation(prediction: Prediction): string {
         switch (prediction.match) {
             case "exact":
                 return "Predicted and true date ranges overlap by ≥ 90%.";
-            case "close":
+            case "partial":
                 return "Date ranges overlap by 40–89%, or their midpoints differ by ≤ 50 years.";
             case "none":
                 return "Date range overlap is < 40% and midpoint difference is > 50 years.";
@@ -136,7 +136,7 @@ export function getStatusClass(p: Prediction): string {
 
 export const matchClassMap: Record<PredictionMatch, string> = {
     exact: 'success',
-    close: 'warning',
+    partial: 'warning',
     none: 'danger',
     unknown: 'disabled',
 };

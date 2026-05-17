@@ -6,12 +6,7 @@
                 <mat-icon>arrow_back</mat-icon>
                 Back to All Predictions
             </button>
-
-
         </div>
-        @if (prediction) {
-
-        }
     </div>
 
     @if (prediction) {
@@ -179,8 +174,9 @@
                         @if (isClassification(prediction)) {
                             <div class="w-100 flex align-stretch">
                                 <div class="card w-100 p-4 flex column justify-center chronology">
-                                    <div class="badge primary card-title">
-                                        True Historical Period
+                                    <div class="badge primary card-title success-icon">
+                                        <mat-icon>check_small</mat-icon>
+                                        <span>True Historical Period</span>
                                     </div>
                                     <div class="flex row nowrap justify-start align-center gap-2">
                                         <div class="indicator"
@@ -194,7 +190,8 @@
                         } @else {
                             <div class="w-100 flex align-stretch">
                                 <div class="card w-100 p-4 flex column justify-center chronology">
-                                    <div class="badge primary card-title">
+                                    <div class="badge primary card-title success-icon">
+                                        <mat-icon>check_small</mat-icon>
                                         True Year Range
                                     </div>
 
@@ -355,7 +352,7 @@
                                                 <div class="legend-row flex row justify-between align-center p-1 gap-2">
                                                     <div
                                                         class="flex row nowrap justify-start align-center gap-1">
-                                                        <div class="indicator small"
+                                                        <div class="indicator sm"
                                                              [ngStyle]="{'background-color': getColor(probability.name)}"></div>
                                                         <div>
                                                             {{ probability.name }}

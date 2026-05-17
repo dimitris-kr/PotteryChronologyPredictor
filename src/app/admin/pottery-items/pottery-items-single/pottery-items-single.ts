@@ -10,7 +10,7 @@ import {
 } from '../../../core/utils/helpers';
 import {DatePipe, NgClass, NgStyle} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
-import {MatIconButton} from '@angular/material/button';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatTooltip} from '@angular/material/tooltip';
 import {MatProgressSpinner} from '@angular/material/progress-spinner';
 import {
@@ -26,6 +26,7 @@ import {RequestParams, SortOrder} from '../../../core/models/request-params';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {ApiPredictions} from '../../../core/services/api-predictions';
 import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
+import {Breadcrumb} from '../../../core/services/breadcrumb';
 
 @Component({
   selector: 'app-pottery-items-single',
@@ -50,7 +51,8 @@ import {MatSort, MatSortHeader, Sort} from '@angular/material/sort';
         MatSort,
         MatSortHeader,
         MatTable,
-        NgClass
+        NgClass,
+        MatButton
     ],
   templateUrl: './pottery-items-single.html',
   styleUrl: './pottery-items-single.scss',
@@ -96,6 +98,7 @@ export class PotteryItemsSingle {
         private alert: Alert,
         private router: Router,
         private cdr: ChangeDetectorRef,
+        private breadcrumb: Breadcrumb,
     ) {}
 
     ngOnInit(): void {
@@ -109,6 +112,8 @@ export class PotteryItemsSingle {
                 this.potteryItem = potteryItem;
                 this.cdr.markForCheck();
                 this.loadImage(potteryItem);
+
+                this.breadcrumb.setLabel(this.router.url, `Pottery Item #${potteryItem.id}`);
 
                 this.connectedPredictions.params.filters.pottery_item_id = potteryItem.id;
                 this.loadConnectedPredictions();

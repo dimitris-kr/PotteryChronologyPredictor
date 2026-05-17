@@ -49,14 +49,3 @@
 
     }
 }
-
-.card {
-    &.chronology {
-        min-height: 80px;
-
-        &.prediction {
-            border: 2px solid color-mix(in oklab, var(--orange-20) 30%, transparent);
-            box-shadow: 0 5px 25px -10px color-mix(in oklab, var(--orange-20) 50%, transparent);
-        }
-    }
-}

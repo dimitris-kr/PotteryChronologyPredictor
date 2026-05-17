@@ -1,173 +1,181 @@
 <div class="inner">
-    <div class="px-4 flex column gap-3">
-        <div class="flex row wrap justify-between align-center">
+    <div class="px-2 flex column gap-3">
+        <div class="flex column gap-0 justify-start align-start">
             <h1 class="m-0">Predictive Models</h1>
-            <button mat-icon-button routerLink="/admin/models" matTooltip="Back to All Predictive Models"
-                    matTooltipPosition="above">
-                <mat-icon>close_fullscreen</mat-icon>
+            <button mat-button routerLink="/admin/models" class="btn-sm btn-link bold">
+                <mat-icon>arrow_back</mat-icon>
+                Back to All Predictive Models
             </button>
         </div>
         @if (model) {
-            <div class="flex column gap-2">
-                <div class="flex row justify-start align-center gap-2 wrap">
-                    <h3 class="m-0">{{ capitalize(model.task.name) }} Model: </h3>
-                    <div class="badge primary">
-                        {{ model.name.toUpperCase() }}
-                    </div>
-                </div>
-                <div class="meta flex row wrap gap-3">
-                    <div>
-                        Input Data Type:
-                        <strong>
-                            @for (ft of model.feature_sets; track ft.id; let idx = $index) {
-                                {{ capitalize(ft.data_type) }}
-                                @if (idx < model.feature_sets.length - 1) {
-                                    &
-                                }
-                            }
-                        </strong>
-                    </div>
-                    <div>
-                        Input Representation:
-                        <strong>
-                            @for (ft of model.feature_sets; track ft.id; let idx = $index) {
-                                {{ ft.feature_type.toUpperCase() }}
-                                @if (idx < model.feature_sets.length - 1) {
-                                    &
-                                }
-                            }
-                        </strong>
-                    </div>
-                    <div>
-                        Output Type:
-                        <strong>
-                            @for (t of model.targets; track t.id; let idx = $index) {
-                                {{ capitalize(t.name) }}
-                                @if (idx < model.targets.length - 1) {
-                                    &
-                                }
-                            }
-                        </strong>
-                    </div>
-                </div>
-            </div>
+
         }
     </div>
 
     @if (model) {
-        <div class="flex column gap-3">
-            <div class="px-4 flex row gap-2 justify-start align-center">
-                <h3 class="m-0">Current Version Evaluation</h3>
+        <div class="flex column gy-6">
+            <div class="flex row wrap justify-between align-stretch gy-4">
+                <div class="w-100 px-2 flex column gap-2">
+                    <div class="flex row justify-start align-center gap-2 wrap">
+                        <h3 class="m-0">{{ capitalize(model.task.name) }} Model: </h3>
+                        <div class="badge primary">
+                            {{ model.name.toUpperCase() }}
+                        </div>
+                    </div>
+                    <div class="meta flex row wrap gap-3">
+                        <div>
+                            Input Data Type:
+                            <strong>
+                                @for (ft of model.feature_sets; track ft.id; let idx = $index) {
+                                    {{ capitalize(ft.data_type) }}
+                                    @if (idx < model.feature_sets.length - 1) {
+                                        &
+                                    }
+                                }
+                            </strong>
+                        </div>
+                        <div>
+                            Input Representation:
+                            <strong>
+                                @for (ft of model.feature_sets; track ft.id; let idx = $index) {
+                                    {{ ft.feature_type.toUpperCase() }}
+                                    @if (idx < model.feature_sets.length - 1) {
+                                        &
+                                    }
+                                }
+                            </strong>
+                        </div>
+                        <div>
+                            Output Type:
+                            <strong>
+                                @for (t of model.targets; track t.id; let idx = $index) {
+                                    {{ capitalize(t.name) }}
+                                    @if (idx < model.targets.length - 1) {
+                                        &
+                                    }
+                                }
+                            </strong>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <app-model-scores-chart
-                [scores]="scores">
-            </app-model-scores-chart>
+            <div class="flex column gap-4">
+                <div class="px-2 flex row gap-2 justify-start align-center">
+                    <h3 class="m-0">Current Version Evaluation</h3>
+                </div>
 
-        </div>
+                <app-model-scores-chart
+                    [scores]="scores">
+                </app-model-scores-chart>
 
-        <div class="flex column gap-3">
-            <div class="px-4 flex row gap-2 justify-start align-center">
-                <h3 class="m-0">All Versions</h3>
             </div>
 
-            <div class="card flex column gap-4 p-4 model-versions table-container">
-                <table
-                    mat-table
-                    [dataSource]="versions.data"
-                    matSort
-                    matSortDisableClear
-                    (matSortChange)="onSortChange($event)"
-                    matSortActive="created_at"
-                    matSortDirection="desc"
-                >
-                    <!-- Current -->
-                    <ng-container matColumnDef="current">
-                        <th mat-header-cell *matHeaderCellDef></th>
-                        <td mat-cell *matCellDef="let v">
-                            @if (v.is_current) {
-                                <div class="badge primary">
-                                    Current
-                                </div>
-                            }
-                        </td>
-                    </ng-container>
+            <div class="flex column gap-4">
+                <div class="px-2 flex row gap-2 justify-start align-center">
+                    <h3 class="m-0">All Versions</h3>
+                </div>
 
-                    <!-- Version -->
-                    <ng-container matColumnDef="version">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header="version">Version</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{ v.version }}
-                        </td>
-                    </ng-container>
+                <div class="card flex column gap-4 p-4 model-versions table-container">
+                    <table
+                        mat-table
+                        [dataSource]="versions.data"
+                        matSort
+                        matSortDisableClear
+                        (matSortChange)="onSortChange($event)"
+                        matSortActive="created_at"
+                        matSortDirection="desc"
+                    >
+                        <!-- Current -->
+                        <ng-container matColumnDef="current">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let v">
+                                @if (v.is_current) {
+                                    <div class="badge primary">
+                                        Current
+                                    </div>
+                                }
+                            </td>
+                        </ng-container>
 
-                    <!-- Train Sample Size -->
-                    <ng-container matColumnDef="sampleSize">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header="train_sample_size">Train Sample Size</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{ v.train_sample_size }}
-                        </td>
-                    </ng-container>
+                        <!-- Version -->
+                        <ng-container matColumnDef="version">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header="version">Version</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{ v.version }}
+                            </td>
+                        </ng-container>
 
-                    <!-- Score -->
-                    <ng-container matColumnDef="score">
-                        <th mat-header-cell *matHeaderCellDef
-                            [mat-sort-header]="scoreColumn(model.task.name)">{{ scoreColumnLabel(model.task.name) }}
-                        </th>
-                        <td mat-cell *matCellDef="let v">
-                            @switch (model.task.name.toLowerCase()) {
-                                @case ("classification") {
-                                    <div
-                                        class="badge"
-                                        [ngStyle]="{
+                        <!-- Train Sample Size -->
+                        <ng-container matColumnDef="sampleSize">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header="train_sample_size">Train Sample
+                                Size
+                            </th>
+                            <td mat-cell *matCellDef="let v">
+                                {{ v.train_sample_size }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Score -->
+                        <ng-container matColumnDef="score">
+                            <th mat-header-cell *matHeaderCellDef
+                                [mat-sort-header]="scoreColumn(model.task.name)">{{ scoreColumnLabel(model.task.name) }}
+                            </th>
+                            <td mat-cell *matCellDef="let v">
+                                @switch (model.task.name.toLowerCase()) {
+                                    @case ("classification") {
+                                        <div
+                                            class="badge"
+                                            [ngStyle]="{
                                             backgroundColor: getScoreColor(v.val_accuracy, 'accuracy'),
                                             color: 'white'
                                         }"
-                                    >
-                                        {{ v.val_accuracy | percent:'1.0-2' }}
-                                    </div>
-                                }
-                                @case ("regression") {
-                                    <div
-                                        class="badge"
-                                        [ngStyle]="{
+                                        >
+                                            {{ v.val_accuracy | percent:'1.0-2' }}
+                                        </div>
+                                    }
+                                    @case ("regression") {
+                                        <div
+                                            class="badge"
+                                            [ngStyle]="{
                                             backgroundColor: getScoreColor(v.val_mae, 'mae', versions.maxMae),
                                             color: 'white'
                                         }"
-                                    >
-                                        ±{{ v.val_mae | number: '1.0-0' }} years
-                                    </div>
+                                        >
+                                            ±{{ v.val_mae | number: '1.0-0' }} years
+                                        </div>
+                                    }
+                                    @default {
+                                    }
                                 }
-                                @default {
-                                }
-                            }
-                        </td>
-                    </ng-container>
+                            </td>
+                        </ng-container>
 
-                    <!-- Trained On -->
-                    <ng-container matColumnDef="trainedOn">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header="created_at">Trained On</th>
-                        <td mat-cell *matCellDef="let v">
-                            {{ v.created_at | date:'medium' }}
-                        </td>
-                    </ng-container>
+                        <!-- Trained On -->
+                        <ng-container matColumnDef="trainedOn">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header="created_at">Trained On</th>
+                            <td mat-cell *matCellDef="let v">
+                                {{ v.created_at | date:'medium' }}
+                            </td>
+                        </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="versions.columns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: versions.columns"></tr>
-                </table>
+                        <tr mat-header-row *matHeaderRowDef="versions.columns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: versions.columns"></tr>
+                    </table>
 
-                <mat-paginator
-                    [length]="versions.total"
-                    [pageSize]="versions.params.page.limit"
-                    [pageSizeOptions]="[25, 50, 75, 100]"
-                    (page)="loadVersions($event)">
-                </mat-paginator>
+                    <mat-paginator
+                        [length]="versions.total"
+                        [pageSize]="versions.params.page.limit"
+                        [pageSizeOptions]="[25, 50, 75, 100]"
+                        (page)="loadVersions($event)">
+                    </mat-paginator>
+                </div>
+
+                <app-model-version-progress-chart
+                    [versions]="versionsAll"
+                    [task]="model.task.name.toLowerCase()">
+                </app-model-version-progress-chart>
             </div>
-
-            <app-model-version-progress-chart
-                [versions]="versionsAll"
-                [task]="model.task.name.toLowerCase()">
-            </app-model-version-progress-chart>
         </div>
     }
 </div>

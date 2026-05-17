@@ -1,5 +1,5 @@
-<div class="inner">
-    <div class="px-4">
+<div class="inner gy-6">
+    <div class="px-2">
         <h1>Predictive Models</h1>
         <p>Here you can view and manage the neural network models responsible for producing pottery chronology
             predictions.</p>
@@ -7,7 +7,7 @@
 
     @for (table of modelsTables; track table.task.id) {
         <div class="flex column gap-3">
-            <div class="px-4 flex row gap-2 justify-start align-center">
+            <div class="px-2 flex row gap-2 justify-start align-center">
                 <h3 class="m-0">{{ capitalize(table.task.name) }} Models</h3>
                 @if (taskExplanation(table.task.name)) {
                     <button
@@ -120,14 +120,19 @@
                     <ng-container matColumnDef="actions">
                         <th mat-header-cell *matHeaderCellDef></th>
                         <td mat-cell *matCellDef="let m">
-                            <button mat-icon-button [routerLink]="['/admin/models', m.model.id]" matTooltip="View Details" matTooltipPosition="above">
-                                <mat-icon>open_in_new</mat-icon>
+                            <button mat-icon-button matTooltip="View Model Details" matTooltipPosition="above" class="btn-sm border">
+                                <mat-icon>arrow_forward</mat-icon>
                             </button>
                         </td>
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                    <tr mat-row
+                        *matRowDef="let row; columns: displayedColumns"
+                        [routerLink]="['/admin/models', row.model.id]"
+                        class="clickable-row"
+                        tabindex="0"
+                    ></tr>
                 </table>
 
                 <mat-paginator

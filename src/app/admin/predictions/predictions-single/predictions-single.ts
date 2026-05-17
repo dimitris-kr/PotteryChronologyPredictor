@@ -28,6 +28,7 @@ import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {FeedbackCreateForm} from '../../../reusable/feedback-create-form/feedback-create-form';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {Breadcrumb} from '../../../core/services/breadcrumb';
 
 @Component({
   selector: 'app-predictions-single',
@@ -75,7 +76,8 @@ export class PredictionsSingle {
         private alert: Alert,
         private router: Router,
         private cdr: ChangeDetectorRef,
-        private dialogService: MatDialog
+        private dialogService: MatDialog,
+        private breadcrumb: Breadcrumb,
     ) {}
 
     ngOnInit(): void {
@@ -89,6 +91,8 @@ export class PredictionsSingle {
                 this.prediction = prediction;
                 this.cdr.markForCheck();
                 this.loadImage(prediction);
+
+                this.breadcrumb.setLabel(this.router.url, `Prediction #${prediction.id}`);
             });
     }
 

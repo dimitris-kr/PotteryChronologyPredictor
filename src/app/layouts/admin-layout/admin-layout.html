@@ -12,7 +12,10 @@
 
         <mat-sidenav-content>
             <div class="content">
-                <app-topbar (menuClick)="sidenav.toggle()"></app-topbar>
+                <div class="flex column gy-2">
+                    <app-topbar (menuClick)="sidenav.toggle()"></app-topbar>
+                    <app-breadcrumb></app-breadcrumb>
+                </div>
                 <router-outlet></router-outlet>
             </div>
         </mat-sidenav-content>

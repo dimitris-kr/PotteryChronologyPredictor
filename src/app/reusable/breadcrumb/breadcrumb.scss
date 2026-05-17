@@ -1,0 +1,26 @@
+.breadcrumb {
+    min-height: 32px;
+
+    .mat-mdc-button-base.btn-link.breadcrumb-link {
+        padding: 0 10px !important;
+    }
+
+    .separator {
+        --separator-size: 16px;
+
+        width: var(--separator-size);
+        height: var(--separator-size);
+
+        .mat-icon {
+            width: var(--separator-size);
+            height: var(--separator-size);
+            font-size: var(--separator-size);
+        }
+    }
+
+    .current {
+        padding: 0 10px;
+        font-size: 14px;
+        color: var(--black-30);
+    }
+}

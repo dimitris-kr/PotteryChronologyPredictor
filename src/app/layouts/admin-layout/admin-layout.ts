@@ -4,6 +4,7 @@ import {Sidebar} from '../../reusable/sidebar/sidebar';
 import {Topbar} from '../../reusable/topbar/topbar';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
+import {Breadcrumb} from '../../reusable/breadcrumb/breadcrumb';
 
 @Component({
   selector: 'app-admin-layout',
@@ -13,7 +14,8 @@ import {MatSidenav, MatSidenavContainer, MatSidenavContent} from '@angular/mater
         Topbar,
         MatSidenavContainer,
         MatSidenav,
-        MatSidenavContent
+        MatSidenavContent,
+        Breadcrumb
     ],
   templateUrl: './admin-layout.html',
   styleUrl: './admin-layout.scss',

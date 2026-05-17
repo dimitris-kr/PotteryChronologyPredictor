@@ -1,11 +1,29 @@
 .mat-column-image {
     width: 50px;
+    min-width: unset;
 }
 
 .mat-column-createdAt {
-    width: 100px;
+    width: 110px;
 }
 
 .mat-mdc-slider {
     width: calc(100% - 16px);
+}
+
+/*.mat-column-startYear,
+.mat-column-endYear {
+    min-width: 80px;
+}*/
+
+.mat-column-description {
+    width: 15%;
+}
+
+.mat-column-trainData{
+    min-width: 50px;
+}
+
+.mat-column-source{
+    min-width: 70px;
 }

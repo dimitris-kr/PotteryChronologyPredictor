@@ -7,7 +7,7 @@ export type PredictionSortBy = 'created_at' | 'id';
 export type PredictionInputType = 'text' | 'image' | 'text_image';
 export type PredictionOutputType = 'historical_period' | 'years';
 export type PredictionStatus = 'pending' | 'validated';
-export type PredictionMatch = 'exact' | 'close' | 'none' | 'unknown';
+export type PredictionMatch = 'exact' | 'partial' | 'none' | 'unknown';
 
 export interface PredictionBase {
     id: number;
